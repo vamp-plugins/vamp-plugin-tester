@@ -37,68 +37,76 @@
     authorization.
 */
 
-#ifndef _TEST_H_
-#define _TEST_H_
+#ifndef _TEST_INPUT_EXTREMES_H_
+#define _TEST_INPUT_EXTREMES_H_
+
+#include "Test.h"
+#include "Tester.h"
 
 #include <string>
 
 #include <vamp-hostsdk/Plugin.h>
 
-class Test
+class TestNormalInput : public Test
 {
 public:
-    virtual ~Test();
-    
-    class Result {
-
-    public:
-        enum Code { Success, Warning, Error };
-
-        Result(Code c, std::string m) : m_code(c), m_message(m) { }
-
-        Code code() { return m_code; }
-        std::string message() { return m_message; }
-
-    protected:
-        Code m_code;
-        std::string m_message;
-    };
-
-    static Result success() { return Result(Result::Success, ""); }
-    static Result warning(std::string m) { return Result(Result::Warning, m); }
-    static Result error(std::string m) { return Result(Result::Error, m); }
-
-    typedef std::vector<Result> Results;
-
-    class FailedToLoadPlugin { };
-
-    // may throw FailedToLoadPlugin
-    virtual Results test(std::string key) = 0;
+    TestNormalInput() : Test() { }
+    Results test(std::string key);
 
 protected:
-    Test();
-
-    // may throw FailedToLoadPlugin
-    Vamp::Plugin *load(std::string key, float rate = 44100);
-
-    float **createBlock(size_t channels, size_t blocksize);
-    void destroyBlock(float **blocks, size_t channels);
-
-    bool initDefaults(Vamp::Plugin *, size_t &channels,
-                      size_t &step, size_t &block, Results &r);
-
-    void appendFeatures(Vamp::Plugin::FeatureSet &a,
-                        const Vamp::Plugin::FeatureSet &b);
-
-    bool allFeaturesValid(const Vamp::Plugin::FeatureSet &); // i.e. no NaN/inf
+    static Tester::TestRegistrar<TestNormalInput> m_registrar;
 };
 
-extern bool operator==(const Vamp::Plugin::FeatureSet &a,
-                       const Vamp::Plugin::FeatureSet &b);
-extern bool operator==(const Vamp::Plugin::FeatureList &a,
-                       const Vamp::Plugin::FeatureList &b);
-extern bool operator==(const Vamp::Plugin::Feature &a,
-                       const Vamp::Plugin::Feature &b);
+class TestNoInput : public Test
+{
+public:
+    TestNoInput() : Test() { }
+    Results test(std::string key);
+
+protected:
+    static Tester::TestRegistrar<TestNoInput> m_registrar;
+};
+
+class TestShortInput : public Test
+{
+public:
+    TestShortInput() : Test() { }
+    Results test(std::string key);
+
+protected:
+    static Tester::TestRegistrar<TestShortInput> m_registrar;
+};
+
+class TestSilentInput : public Test
+{
+public:
+    TestSilentInput() : Test() { }
+    Results test(std::string key);
+
+protected:
+    static Tester::TestRegistrar<TestSilentInput> m_registrar;
+};
+
+class TestTooLoudInput : public Test
+{
+public:
+    TestTooLoudInput() : Test() { }
+    Results test(std::string key);
+
+protected:
+    static Tester::TestRegistrar<TestTooLoudInput> m_registrar;
+};
+
+class TestRandomInput : public Test
+{
+public:
+    TestRandomInput() : Test() { }
+    Results test(std::string key);
+
+protected:
+    static Tester::TestRegistrar<TestRandomInput> m_registrar;
+};
+
 
 #endif
 

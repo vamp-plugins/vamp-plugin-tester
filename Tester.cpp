@@ -86,20 +86,25 @@ Tester::test()
 
       * Any of the plugin's name, maker etc fields are empty - DONE
 
+      * Default value of a parameter is not quantized as specified - DONE
+
+      * Parameter minValue >= maxValue, or defaultValue < minValue
+        or > maxValue - DONE
+
+      * Plugin fails when given zero-length or very short input - DONE
+
+      * Plugin fails when given "all digital zeros" input - DONE
+
+      * Plugin fails when given input that exceeds +/-1 - DONE
+
+      * Plugin fails when given "normal" random input (just in case!) - DONE
+
       * Plugin returns different results if another instance is
         constructed and run "interleaved" with it (from same thread)
  
       * Plugin's returned timestamps do not change as expected when
         run with a different base timestamp for input (though there
         could be legitimate reasons for this)
-
-      * Plugin fails when given zero-length or very short input
-
-      * Plugin fails when given "all digital zeros" input
-
-      * Plugin fails when given input that exceeds +/-1
-
-      * Plugin fails when given "normal" random input (just in case!)
 
       * Plugin produces different results on second run, after reset
         called
@@ -108,11 +113,6 @@ Tester::test()
         from its default value (i.e. plugin produces different
         results depending on whether parameter is set explicitly by
         host to default value or not)
-
-      * Default value of a parameter is not quantized as specified - DONE
-
-      * Parameter minValue >= maxValue, or defaultValue < minValue
-        or > maxValue - DONE
         
       * If a plugin reports any programs, selecting default program
         explicitly changes results (as for default parameters)
