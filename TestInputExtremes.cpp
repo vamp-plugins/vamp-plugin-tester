@@ -45,6 +45,7 @@ using namespace Vamp;
 #include <memory>
 using namespace std;
 
+#include <cstdlib>
 #include <cmath>
 
 Tester::TestRegistrar<TestNormalInput>
@@ -68,6 +69,7 @@ TestRandomInput::m_registrar("Random input");
 Test::Results
 TestNormalInput::test(string key)
 {
+    Plugin::FeatureSet f;
     int rate = 44100;
     auto_ptr<Plugin> p(load(key, rate));
     Results r;
@@ -83,11 +85,13 @@ TestNormalInput::test(string key)
             ++idx;
         }
         RealTime timestamp = RealTime::frame2RealTime(idx, rate);
-        p->process(block, timestamp);
+        Plugin::FeatureSet fs = p->process(block, timestamp);
+        appendFeatures(f, fs);
     }
     destroyBlock(block, channels);
     Plugin::FeatureSet fs = p->getRemainingFeatures();
-    if (allFeaturesValid(fs)) {
+    appendFeatures(f, fs);
+    if (allFeaturesValid(f)) {
         r.push_back(success());
     } else {
         r.push_back(warning("plugin returned one or more NaN/inf values"));
@@ -114,6 +118,7 @@ TestNoInput::test(string key)
 Test::Results
 TestShortInput::test(string key)
 {
+    Plugin::FeatureSet f;
     int rate = 44100;
     auto_ptr<Plugin> p(load(key, rate));
     Results r;
@@ -127,10 +132,12 @@ TestShortInput::test(string key)
         }
         ++idx;
     }
-    p->process(block, RealTime::zeroTime);
+    Plugin::FeatureSet fs = p->process(block, RealTime::zeroTime);
+    appendFeatures(f, fs);
     destroyBlock(block, channels);
-    Plugin::FeatureSet fs = p->getRemainingFeatures();
-    if (allFeaturesValid(fs)) {
+    fs = p->getRemainingFeatures();
+    appendFeatures(f, fs);
+    if (allFeaturesValid(f)) {
         r.push_back(success());
     } else {
         r.push_back(warning("plugin returned one or more NaN/inf values"));
@@ -141,6 +148,7 @@ TestShortInput::test(string key)
 Test::Results
 TestSilentInput::test(string key)
 {
+    Plugin::FeatureSet f;
     int rate = 44100;
     auto_ptr<Plugin> p(load(key, rate));
     Results r;
@@ -154,11 +162,13 @@ TestSilentInput::test(string key)
     }
     for (int i = 0; i < 200; ++i) {
         RealTime timestamp = RealTime::frame2RealTime(i * blocksize, rate);
-        p->process(block, timestamp);
+        Plugin::FeatureSet fs = p->process(block, timestamp);
+        appendFeatures(f, fs);
     }
     destroyBlock(block, channels);
     Plugin::FeatureSet fs = p->getRemainingFeatures();
-    if (allFeaturesValid(fs)) {
+    appendFeatures(f, fs);
+    if (allFeaturesValid(f)) {
         r.push_back(success());
     } else {
         r.push_back(warning("plugin returned one or more NaN/inf values"));
@@ -169,6 +179,7 @@ TestSilentInput::test(string key)
 Test::Results
 TestTooLoudInput::test(string key)
 {
+    Plugin::FeatureSet f;
     int rate = 44100;
     auto_ptr<Plugin> p(load(key, rate));
     Results r;
@@ -184,11 +195,13 @@ TestTooLoudInput::test(string key)
             ++idx;
         }
         RealTime timestamp = RealTime::frame2RealTime(idx, rate);
-        p->process(block, timestamp);
+        Plugin::FeatureSet fs = p->process(block, timestamp);
+        appendFeatures(f, fs);
     }
     destroyBlock(block, channels);
     Plugin::FeatureSet fs = p->getRemainingFeatures();
-    if (allFeaturesValid(fs)) {
+    appendFeatures(f, fs);
+    if (allFeaturesValid(f)) {
         r.push_back(success());
     } else {
         r.push_back(warning("plugin returned one or more NaN/inf values"));
@@ -199,6 +212,7 @@ TestTooLoudInput::test(string key)
 Test::Results
 TestRandomInput::test(string key)
 {
+    Plugin::FeatureSet f;
     int rate = 44100;
     auto_ptr<Plugin> p(load(key, rate));
     Results r;
@@ -214,11 +228,13 @@ TestRandomInput::test(string key)
             ++idx;
         }
         RealTime timestamp = RealTime::frame2RealTime(idx, rate);
-        p->process(block, timestamp);
+        Plugin::FeatureSet fs = p->process(block, timestamp);
+        appendFeatures(f, fs);
     }
     destroyBlock(block, channels);
     Plugin::FeatureSet fs = p->getRemainingFeatures();
-    if (allFeaturesValid(fs)) {
+    appendFeatures(f, fs);
+    if (allFeaturesValid(f)) {
         r.push_back(success());
     } else {
         r.push_back(warning("plugin returned one or more NaN/inf values"));
