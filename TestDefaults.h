@@ -37,50 +37,31 @@
     authorization.
 */
 
-#ifndef _TEST_MULTIPLE_RUNS_H_
-#define _TEST_MULTIPLE_RUNS_H_
+#ifndef _TEST_DEFAULTS_H_
+#define _TEST_DEFAULTS_H_
 
 #include "Test.h"
 #include "Tester.h"
 
-class TestDistinctRuns : public Test
+class TestDefaultProgram : public Test
 {
 public:
-    TestDistinctRuns() : Test() { }
+    TestDefaultProgram() : Test() { }
     Results test(std::string key);
     
 protected:
-    static Tester::TestRegistrar<TestDistinctRuns> m_registrar;
+    static Tester::TestRegistrar<TestDefaultProgram> m_registrar;
 };
 
-class TestReset : public Test
+class TestDefaultParameters : public Test
 {
 public:
-    TestReset() : Test() { }
+    TestDefaultParameters() : Test() { }
     Results test(std::string key);
     
 protected:
-    static Tester::TestRegistrar<TestReset> m_registrar;
+    static Tester::TestRegistrar<TestDefaultParameters> m_registrar;
 };
 
-class TestInterleavedRuns : public Test
-{
-public:
-    TestInterleavedRuns() : Test() { }
-    Results test(std::string key);
-    
-protected:
-    static Tester::TestRegistrar<TestInterleavedRuns> m_registrar;
-};
-
-class TestDifferentStartTimes : public Test
-{
-public:
-    TestDifferentStartTimes() : Test() { }
-    Results test(std::string key);
-    
-protected:
-    static Tester::TestRegistrar<TestDifferentStartTimes> m_registrar;
-};
 
 #endif

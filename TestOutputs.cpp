@@ -85,8 +85,8 @@ TestOutputNumbers::test(string key)
 
     std::set<int> used;
     Plugin::OutputList outputs = p->getOutputDescriptors();
-    for (Plugin::FeatureSet::const_iterator i = fs.begin();
-         i != fs.end(); ++i) {
+    for (Plugin::FeatureSet::const_iterator i = f.begin();
+         i != f.end(); ++i) {
         int o = i->first;
         used.insert(o);
         if (o < 0 || o >= (int)outputs.size()) {
@@ -133,25 +133,25 @@ TestTimestamps::test(string key)
     if (data) destroyTestAudio(data, channels);
 
     Plugin::OutputList outputs = p->getOutputDescriptors();
-    for (Plugin::FeatureSet::const_iterator i = fs.begin();
-         i != fs.end(); ++i) {
+    for (Plugin::FeatureSet::const_iterator i = f.begin();
+         i != f.end(); ++i) {
         const Plugin::OutputDescriptor &o = outputs[i->first];
         const Plugin::FeatureList &fl = i->second;
         for (int j = 0; j < (int)fl.size(); ++j) {
-            const Plugin::Feature &f = fl[j];
+            const Plugin::Feature &fe = fl[j];
             switch (o.sampleType) {
             case Plugin::OutputDescriptor::OneSamplePerStep:
-                if (f.hasTimestamp) {
+                if (fe.hasTimestamp) {
                     r.push_back(note("Plugin returns features with timestamps on OneSamplePerStep output"));
                 }
-                if (f.hasDuration) {
+                if (fe.hasDuration) {
                     r.push_back(note("Plugin returns features with durations on OneSamplePerStep output"));
                 }
                 break;
             case Plugin::OutputDescriptor::FixedSampleRate:
                 break;
             case Plugin::OutputDescriptor::VariableSampleRate:
-                if (!f.hasTimestamp) {
+                if (!fe.hasTimestamp) {
                     r.push_back(error("Plugin returns features with no timestamps on VariableSampleRate output"));
                 }
                 break;

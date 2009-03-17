@@ -105,7 +105,7 @@ Tester::test(int &notes, int &warnings, int &errors)
  
       * Plugin's returned timestamps do not change as expected when
         run with a different base timestamp for input (though there
-        could be legitimate reasons for this)
+        could be legitimate reasons for this) - DONE
 
       * Plugin produces different results on second run, after reset
         called - DONE
@@ -119,20 +119,20 @@ Tester::test(int &notes, int &warnings, int &errors)
         explicitly changes results (as for default parameters)
 
       * Output feature does not hasTimestamp when output type is
-        VariableSampleRate
+        VariableSampleRate - DONE
 
       * Output feature hasTimestamp or hasDuration when output type is
-        OneSamplePerStep (warning only, this is not an error)
+        OneSamplePerStep (warning only, this is not an error) - DONE
 
       * Plugin fails gracelessly when constructed with "weird" sample
         rate or initialised with "wrong" step size, block size, or
         number of channels
 
       * Plugin returns features whose output numbers do not have
-        a corresponding record in output descriptor list
+        a corresponding record in output descriptor list - DONE
 
       * Plugin fails to return any features on some output (warning
-        only)
+        only) - DONE
 
       * Constructor takes a long time to run.  A fuzzy concept, but
         suggests that some work should have been deferred to
