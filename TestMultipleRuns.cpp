@@ -48,13 +48,13 @@ using namespace std;
 #include <cmath>
 
 Tester::TestRegistrar<TestDistinctRuns>
-TestDistinctRuns::m_registrar("Consecutive runs with separate instances");
+TestDistinctRuns::m_registrar("D1 Consecutive runs with separate instances");
 
 Tester::TestRegistrar<TestReset>
-TestReset::m_registrar("Consecutive runs with a single instance using reset");
+TestReset::m_registrar("D2 Consecutive runs with a single instance using reset");
 
 Tester::TestRegistrar<TestInterleavedRuns>
-TestInterleavedRuns::m_registrar("Simultaneous interleaved runs in a single thread");
+TestInterleavedRuns::m_registrar("D3 Simultaneous interleaved runs in a single thread");
 
 static const size_t _step = 1000;
 

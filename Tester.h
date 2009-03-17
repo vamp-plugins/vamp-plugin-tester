@@ -50,7 +50,7 @@ public:
     Tester(std::string pluginKey);
     ~Tester();
 
-    bool test();
+    bool test(int &notes, int &warnings, int &errors);
 
     class Registrar {
     public:

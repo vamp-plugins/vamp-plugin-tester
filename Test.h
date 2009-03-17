@@ -88,9 +88,11 @@ protected:
     float **createTestAudio(size_t channels, size_t blocksize, size_t blocks);
     void destroyTestAudio(float **audio, size_t channels);
 
+    // use plugin's preferred step/block size, return them:
     bool initDefaults(Vamp::Plugin *, size_t &channels,
                       size_t &step, size_t &block, Results &r);
 
+    // use the given step/block size and an adapter:
     bool initAdapted(Vamp::Plugin *, size_t &channels,
                      size_t step, size_t block, Results &r);
 

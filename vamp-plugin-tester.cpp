@@ -86,10 +86,11 @@ int main(int argc, char **argv)
         bool good = true;
         Vamp::HostExt::PluginLoader::PluginKeyList keys =
             Vamp::HostExt::PluginLoader::getInstance()->listPlugins();
+        int notes = 0, warnings = 0, errors = 0;
         for (int i = 0; i < (int)keys.size(); ++i) {
             cout << "Testing plugin: " << keys[i] << endl;
             Tester tester(keys[i]);
-            if (tester.test()) {
+            if (tester.test(notes, warnings, errors)) {
                 cout << name << ": All tests succeeded for this plugin" << endl;
             } else {
                 cout << name << ": Some tests failed for this plugin" << endl;
@@ -98,7 +99,16 @@ int main(int argc, char **argv)
             cout << endl;
         }
         if (good) {
-            cout << name << ": All tests succeeded" << endl;
+            cout << name << ": All tests succeeded";
+            if (warnings > 0) {
+                cout << ", with " << warnings << " warning(s)";
+                if (notes > 0) {
+                    cout << " and " << notes << " other note(s)";
+                }
+            } else if (notes > 0) {
+                cout << ", with " << notes << " note(s)";
+            }
+            cout << endl;
             return 0;
         } else {
             cout << name << ": Some tests failed" << endl;
@@ -107,8 +117,18 @@ int main(int argc, char **argv)
     } else {
         string key = argv[1];
         Tester tester(key);
-        if (tester.test()) {
-            cout << name << ": All tests succeeded" << endl;
+        int notes = 0, warnings = 0, errors = 0;
+        if (tester.test(notes, warnings, errors)) {
+            cout << name << ": All tests succeeded";
+            if (warnings > 0) {
+                cout << ", with " << warnings << " warning(s)";
+                if (notes > 0) {
+                    cout << " and " << notes << " other note(s)";
+                }
+            } else if (notes > 0) {
+                cout << ", with " << notes << " note(s)";
+            }
+            cout << endl;
             return 0;
         } else {
             cout << name << ": Some tests failed" << endl;

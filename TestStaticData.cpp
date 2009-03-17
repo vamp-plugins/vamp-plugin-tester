@@ -48,13 +48,13 @@ using namespace std;
 #include <cmath>
 
 Tester::TestRegistrar<TestIdentifiers>
-TestIdentifiers::m_registrar("Invalid identifiers");
+TestIdentifiers::m_registrar("A1 Invalid identifiers");
 
 Tester::TestRegistrar<TestEmptyFields>
-TestEmptyFields::m_registrar("Empty metadata fields");
+TestEmptyFields::m_registrar("A2 Empty metadata fields");
 
 Tester::TestRegistrar<TestValueRanges>
-TestValueRanges::m_registrar("Inappropriate value extents");
+TestValueRanges::m_registrar("A3 Inappropriate value extents");
 
 Test::Results
 TestIdentifiers::test(string key)

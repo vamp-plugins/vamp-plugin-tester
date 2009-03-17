@@ -46,6 +46,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <cmath>
+#include <set>
 
 #include "Tester.h"
 
@@ -75,7 +76,7 @@ Tester::registry()
 }
 
 bool
-Tester::test()
+Tester::test(int &notes, int &warnings, int &errors)
 {
     /*
       
@@ -152,19 +153,27 @@ Tester::test()
             Test *test = i->second->makeTest();
             Test::Results results = test->test(m_key);
             delete test;
+
+            set<string> printed;
             
             for (int j = 0; j < (int)results.size(); ++j) {
+                string message = results[j].message();
+                if (printed.find(message) != printed.end()) continue;
+                printed.insert(message);
                 switch (results[j].code()) {
                 case Test::Result::Success:
                     break;
                 case Test::Result::Note:
                     std::cout << " ** NOTE: " << results[j].message() << std::endl;
+                    ++notes;
                     break;
                 case Test::Result::Warning:
                     std::cout << " ** WARNING: " << results[j].message() << std::endl;
+                    ++warnings;
                     break;
                 case Test::Result::Error:
                     std::cout << " ** ERROR: " << results[j].message() << std::endl;
+                    ++errors;
                     good = false;
                     break;
                 }

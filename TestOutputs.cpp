@@ -40,7 +40,9 @@
 #include "TestOutputs.h"
 
 #include <vamp-hostsdk/Plugin.h>
+#include <vamp-hostsdk/PluginLoader.h>
 using namespace Vamp;
+using namespace Vamp::HostExt;
 
 #include <set>
 #include <memory>
@@ -49,10 +51,10 @@ using namespace std;
 #include <cmath>
 
 Tester::TestRegistrar<TestOutputNumbers>
-TestOutputNumbers::m_registrar("Output number mismatching");
+TestOutputNumbers::m_registrar("B1 Output number mismatching");
 
 Tester::TestRegistrar<TestTimestamps>
-TestTimestamps::m_registrar("Invalid or dubious timestamp usage");
+TestTimestamps::m_registrar("B2 Invalid or dubious timestamp usage");
 
 static const size_t _step = 1000;
 
@@ -87,13 +89,14 @@ TestOutputNumbers::test(string key)
          i != fs.end(); ++i) {
         int o = i->first;
         used.insert(o);
-        if (o < 0 || o >= outputs.size()) {
+        if (o < 0 || o >= (int)outputs.size()) {
             r.push_back(error("Data returned on nonexistent output"));
         }
     }
-    for (int o = 0; o < outputs.size(); ++o) {
+    for (int o = 0; o < (int)outputs.size(); ++o) {
         if (used.find(o) == used.end()) {
-            r.push_back(note("No results returned for one or more outputs"));       }
+            r.push_back(note("No results returned for one or more outputs")); 
+        }
     }
                 
     return r;
@@ -103,7 +106,11 @@ Test::Results
 TestTimestamps::test(string key)
 {
     int rate = 44100;
-    auto_ptr<Plugin> p(load(key, rate));
+
+    // we want to be sure that a buffer size adapter is not used:
+    auto_ptr<Plugin> p(PluginLoader::getInstance()->loadPlugin
+                       (key, rate, PluginLoader::ADAPT_ALL_SAFE));
+
     Plugin::FeatureSet f;
     Results r;
     float **data = 0;
@@ -111,7 +118,6 @@ TestTimestamps::test(string key)
     size_t step = 0, block = 0;
     size_t count = 100;
 
-    //!!! want to ensure buffer size adapter is not used:
     if (!initDefaults(p.get(), channels, step, block, r)) return r;
     if (!data) data = createTestAudio(channels, block, count);
     for (size_t i = 0; i < count; ++i) {
