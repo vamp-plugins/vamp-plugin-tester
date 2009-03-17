@@ -52,12 +52,12 @@ public:
     class Result {
 
     public:
-        enum Code { Success, Warning, Error };
+        enum Code { Success, Note, Warning, Error };
 
         Result(Code c, std::string m) : m_code(c), m_message(m) { }
 
-        Code code() { return m_code; }
-        std::string message() { return m_message; }
+        Code code() const { return m_code; }
+        std::string message() const { return m_message; }
 
     protected:
         Code m_code;
@@ -65,6 +65,7 @@ public:
     };
 
     static Result success() { return Result(Result::Success, ""); }
+    static Result note(std::string m) { return Result(Result::Note, m); }
     static Result warning(std::string m) { return Result(Result::Warning, m); }
     static Result error(std::string m) { return Result(Result::Error, m); }
 
@@ -84,13 +85,24 @@ protected:
     float **createBlock(size_t channels, size_t blocksize);
     void destroyBlock(float **blocks, size_t channels);
 
+    float **createTestAudio(size_t channels, size_t blocksize, size_t blocks);
+    void destroyTestAudio(float **audio, size_t channels);
+
     bool initDefaults(Vamp::Plugin *, size_t &channels,
                       size_t &step, size_t &block, Results &r);
+
+    bool initAdapted(Vamp::Plugin *, size_t &channels,
+                     size_t step, size_t block, Results &r);
 
     void appendFeatures(Vamp::Plugin::FeatureSet &a,
                         const Vamp::Plugin::FeatureSet &b);
 
     bool allFeaturesValid(const Vamp::Plugin::FeatureSet &); // i.e. no NaN/inf
+
+    void dump(const Vamp::Plugin::FeatureSet &);
+    void dump(const Result &r,
+              const Vamp::Plugin::FeatureSet &,
+              const Vamp::Plugin::FeatureSet &);
 };
 
 extern bool operator==(const Vamp::Plugin::FeatureSet &a,

@@ -56,38 +56,34 @@ TestReset::m_registrar("Consecutive runs with a single instance using reset");
 Tester::TestRegistrar<TestInterleavedRuns>
 TestInterleavedRuns::m_registrar("Simultaneous interleaved runs in a single thread");
 
+static const size_t _step = 1000;
+
 Test::Results
 TestDistinctRuns::test(string key)
 {
     Plugin::FeatureSet f[2];
     int rate = 44100;
     Results r;
-    float **block = 0;
-    size_t channels = 0, step = 0, blocksize = 0;
+    float **data = 0;
+    size_t channels = 0;
+    size_t count = 100;
 
     for (int run = 0; run < 2; ++run) {
         auto_ptr<Plugin> p(load(key, rate));
-        if (!initDefaults(p.get(), channels, step, blocksize, r)) return r;
-        if (!block) block = createBlock(channels, blocksize);
-        int idx = 0;
-        for (int i = 0; i < 100; ++i) {
-            for (size_t j = 0; j < blocksize; ++j) {
-                for (size_t c = 0; c < channels; ++c) {
-                    block[c][j] = sinf(float(idx) / 10.f);
-                    if ((i == 20 || i == 80) && (j < 2)) {
-                        block[c][j] = float(j) - 1.f;
-                    }
-                }
-                ++idx;
-            }
+        if (!initAdapted(p.get(), channels, _step, _step, r)) return r;
+        if (!data) data = createTestAudio(channels, _step, count);
+        for (size_t i = 0; i < count; ++i) {
+            float *ptr[channels];
+            size_t idx = i * _step;
+            for (size_t c = 0; c < channels; ++c) ptr[c] = data[c] + idx;
             RealTime timestamp = RealTime::frame2RealTime(idx, rate);
-            Plugin::FeatureSet fs = p->process(block, timestamp);
+            Plugin::FeatureSet fs = p->process(ptr, timestamp);
             appendFeatures(f[run], fs);
         }
         Plugin::FeatureSet fs = p->getRemainingFeatures();
         appendFeatures(f[run], fs);
     }
-    if (block) destroyBlock(block, channels);
+    if (data) destroyTestAudio(data, channels);
 
     if (!(f[0] == f[1])) {
         r.push_back(warning("Consecutive runs with separate instances produce different results"));
@@ -104,36 +100,33 @@ TestReset::test(string key)
     Plugin::FeatureSet f[2];
     int rate = 44100;
     Results r;
-    float **block = 0;
-    size_t channels = 0, step = 0, blocksize = 0;
+    float **data = 0;
+    size_t channels = 0;
+    size_t count = 100;
 
     auto_ptr<Plugin> p(load(key, rate));
+
     for (int run = 0; run < 2; ++run) {
         if (run == 1) p->reset();
-        if (!initDefaults(p.get(), channels, step, blocksize, r)) return r;
-        if (!block) block = createBlock(channels, blocksize);
-        int idx = 0;
-        for (int i = 0; i < 100; ++i) {
-            for (size_t j = 0; j < blocksize; ++j) {
-                for (size_t c = 0; c < channels; ++c) {
-                    block[c][j] = sinf(float(idx) / 10.f);
-                    if ((i == 20 || i == 80) && (j < 2)) {
-                        block[c][j] = float(j) - 1.f;
-                    }
-                }
-                ++idx;
-            }
+        if (!initAdapted(p.get(), channels, _step, _step, r)) return r;
+        if (!data) data = createTestAudio(channels, _step, count);
+        for (size_t i = 0; i < count; ++i) {
+            float *ptr[channels];
+            size_t idx = i * _step;
+            for (size_t c = 0; c < channels; ++c) ptr[c] = data[c] + idx;
             RealTime timestamp = RealTime::frame2RealTime(idx, rate);
-            Plugin::FeatureSet fs = p->process(block, timestamp);
+            Plugin::FeatureSet fs = p->process(ptr, timestamp);
             appendFeatures(f[run], fs);
         }
         Plugin::FeatureSet fs = p->getRemainingFeatures();
         appendFeatures(f[run], fs);
     }
-    if (block) destroyBlock(block, channels);
+    if (data) destroyTestAudio(data, channels);
 
     if (!(f[0] == f[1])) {
-        r.push_back(warning("Consecutive runs with the same instance (using reset) produce different results"));
+        Result res = warning("Consecutive runs with the same instance (using reset) produce different results");
+        dump(res, f[0], f[1]);
+        r.push_back(res);
     } else {
         r.push_back(success());
     }
@@ -147,32 +140,27 @@ TestInterleavedRuns::test(string key)
     Plugin::FeatureSet f[2];
     int rate = 44100;
     Results r;
-    float **block = 0;
-    size_t channels = 0, step = 0, blocksize = 0;
+    float **data = 0;
+    size_t channels = 0;
+    size_t count = 100;
+
     Plugin *p[2];
     for (int run = 0; run < 2; ++run) {
         p[run] = load(key, rate);
-        if (!initDefaults(p[run], channels, step, blocksize, r)) {
+        if (!initAdapted(p[run], channels, _step, _step, r)) {
             delete p[run];
             if (run > 0) delete p[0];
             return r;
         }
-        if (!block) block = createBlock(channels, blocksize);
+        if (!data) data = createTestAudio(channels, _step, count);
     }
-    int idx = 0;
-    for (int i = 0; i < 100; ++i) {
-        for (size_t j = 0; j < blocksize; ++j) {
-            for (size_t c = 0; c < channels; ++c) {
-                block[c][j] = sinf(float(idx) / 10.f);
-                if ((i == 20 || i == 80) && (j < 2)) {
-                    block[c][j] = float(j) - 1.f;
-                }
-            }
-            ++idx;
-        }
+    for (size_t i = 0; i < count; ++i) {
+        float *ptr[channels];
+        size_t idx = i * _step;
+        for (size_t c = 0; c < channels; ++c) ptr[c] = data[c] + idx;
         RealTime timestamp = RealTime::frame2RealTime(idx, rate);
         for (int run = 0; run < 2; ++run) {
-            Plugin::FeatureSet fs = p[run]->process(block, timestamp);
+            Plugin::FeatureSet fs = p[run]->process(ptr, timestamp);
             appendFeatures(f[run], fs);
         }
     }
@@ -182,10 +170,10 @@ TestInterleavedRuns::test(string key)
         delete p[run];
     }
 
-    if (block) destroyBlock(block, channels);
+    if (data) destroyTestAudio(data, channels);
 
     if (!(f[0] == f[1])) {
-        r.push_back(warning("Consecutive runs with the same instance (using reset) produce different results"));
+        r.push_back(warning("Simultaneous runs with separate instances produce different results"));
     } else {
         r.push_back(success());
     }

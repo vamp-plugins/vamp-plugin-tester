@@ -75,6 +75,33 @@ Test::destroyBlock(float **blocks, size_t channels)
     delete[] blocks;
 }
 
+float **
+Test::createTestAudio(size_t channels, size_t blocksize, size_t blocks)
+{
+    float **b = new float *[channels];
+    for (size_t c = 0; c < channels; ++c) {
+        b[c] = new float[blocksize * blocks];
+        for (int i = 0; i < int(blocksize * blocks); ++i) {
+            b[c][i] = sinf(float(i) / 10.f);
+            if (i == 5005 || i == 20002) {
+                b[c][i-2] = 0;
+                b[c][i-1] = -1;
+                b[c][i] = 1;
+            }
+        }
+    }
+    return b;
+}
+
+void
+Test::destroyTestAudio(float **b, size_t channels)
+{
+    for (size_t c = 0; c < channels; ++c) {
+        delete[] b[c];
+    }
+    delete[] b;
+}
+
 bool
 Test::initDefaults(Plugin *p, size_t &channels, size_t &step, size_t &block,
                    Results &r)
@@ -89,6 +116,18 @@ Test::initDefaults(Plugin *p, size_t &channels, size_t &step, size_t &block,
     }
     if (!p->initialise(channels, step, block)) {
         r.push_back(error("initialisation with default values failed"));
+        return false;
+    }
+    return true;
+}
+
+bool
+Test::initAdapted(Plugin *p, size_t &channels, size_t step, size_t block,
+                  Results &r)
+{
+    channels = p->getMinChannelCount();
+    if (!p->initialise(channels, step, block)) {
+        r.push_back(error("initialisation failed"));
         return false;
     }
     return true;
@@ -122,6 +161,42 @@ Test::allFeaturesValid(const Plugin::FeatureSet &b)
         }
     }
     return true;
+}
+
+void
+Test::dump(const Plugin::FeatureSet &fs)
+{
+    for (Plugin::FeatureSet::const_iterator fsi = fs.begin();
+         fsi != fs.end(); ++fsi) {
+        int output = fsi->first;
+        std::cerr << "Output " << output << ":" << std::endl;
+        const Plugin::FeatureList &fl = fsi->second;
+        for (int i = 0; i < (int)fl.size(); ++i) {
+            std::cerr << "  Feature " << i << ":" << std::endl;
+            const Plugin::Feature &f = fl[i];
+            std::cerr << "    Timestamp: " << (f.hasTimestamp ? "(none)" : f.timestamp.toText()) << std::endl;
+            std::cerr << "    Duration: " << (f.hasDuration ? "(none)" : f.duration.toText()) << std::endl;
+            std::cerr << "    Label: " << (f.label == "" ? "(none)" : f.label) << std::endl;
+            std::cerr << "    Value: " << (f.values.empty() ? "(none)" : "");
+            for (int j = 0; j < (int)f.values.size(); ++j) {
+                std::cerr << f.values[j] << " ";
+            }
+            std::cerr << std::endl;
+        }
+    }
+}
+
+void
+Test::dump(const Result &r,
+           const Plugin::FeatureSet &a,
+           const Plugin::FeatureSet &b)
+{
+    std::cerr << r.message() << std::endl;
+    std::cerr << "\nFirst result set:" << std::endl;
+    dump(a);
+    std::cerr << "\nSecond result set:" << std::endl;
+    dump(b);
+    std::cerr << std::endl;
 }
 
 bool

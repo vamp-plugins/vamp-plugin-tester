@@ -87,31 +87,31 @@ int main(int argc, char **argv)
         Vamp::HostExt::PluginLoader::PluginKeyList keys =
             Vamp::HostExt::PluginLoader::getInstance()->listPlugins();
         for (int i = 0; i < (int)keys.size(); ++i) {
-            cerr << "Testing plugin: " << keys[i] << endl;
+            cout << "Testing plugin: " << keys[i] << endl;
             Tester tester(keys[i]);
             if (tester.test()) {
-                cerr << name << ": All tests succeeded for this plugin" << endl;
+                cout << name << ": All tests succeeded for this plugin" << endl;
             } else {
-                cerr << name << ": Some tests failed for this plugin" << endl;
+                cout << name << ": Some tests failed for this plugin" << endl;
                 good = false;
             }
-            cerr << endl;
+            cout << endl;
         }
         if (good) {
-            cerr << name << ": All tests succeeded" << endl;
+            cout << name << ": All tests succeeded" << endl;
             return 0;
         } else {
-            cerr << name << ": Some tests failed" << endl;
+            cout << name << ": Some tests failed" << endl;
             return 1;
         }   
     } else {
         string key = argv[1];
         Tester tester(key);
         if (tester.test()) {
-            cerr << name << ": All tests succeeded" << endl;
+            cout << name << ": All tests succeeded" << endl;
             return 0;
         } else {
-            cerr << name << ": Some tests failed" << endl;
+            cout << name << ": Some tests failed" << endl;
             return 1;
         }
     }

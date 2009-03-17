@@ -100,14 +100,14 @@ Tester::test()
       * Plugin fails when given "normal" random input (just in case!) - DONE
 
       * Plugin returns different results if another instance is
-        constructed and run "interleaved" with it (from same thread)
+        constructed and run "interleaved" with it (from same thread) - DONE
  
       * Plugin's returned timestamps do not change as expected when
         run with a different base timestamp for input (though there
         could be legitimate reasons for this)
 
       * Plugin produces different results on second run, after reset
-        called
+        called - DONE
 
       * Initial value of a parameter on plugin construction differs
         from its default value (i.e. plugin produces different
@@ -147,7 +147,7 @@ Tester::test()
         for (Registry::const_iterator i = registry().begin();
              i != registry().end(); ++i) {
             
-            std::cerr << " -- Performing test: " << i->first << std::endl;
+            std::cout << " -- Performing test: " << i->first << std::endl;
 
             Test *test = i->second->makeTest();
             Test::Results results = test->test(m_key);
@@ -157,18 +157,21 @@ Tester::test()
                 switch (results[j].code()) {
                 case Test::Result::Success:
                     break;
+                case Test::Result::Note:
+                    std::cout << " ** NOTE: " << results[j].message() << std::endl;
+                    break;
                 case Test::Result::Warning:
-                    std::cerr << " ** WARNING: " << results[j].message() << std::endl;
+                    std::cout << " ** WARNING: " << results[j].message() << std::endl;
                     break;
                 case Test::Result::Error:
-                    std::cerr << " ** ERROR: " << results[j].message() << std::endl;
+                    std::cout << " ** ERROR: " << results[j].message() << std::endl;
                     good = false;
                     break;
                 }
             }
         }
     } catch (Test::FailedToLoadPlugin) {
-        std::cerr << "ERROR: Failed to load plugin (key = \"" << m_key
+        std::cout << "ERROR: Failed to load plugin (key = \"" << m_key
                   << "\")" << std::endl;
     }
 
