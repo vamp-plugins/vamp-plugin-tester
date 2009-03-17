@@ -89,7 +89,9 @@ TestDistinctRuns::test(string key)
     if (data) destroyTestAudio(data, channels);
 
     if (!(f[0] == f[1])) {
-        r.push_back(warning("Consecutive runs with separate instances produce different results"));
+        Result res = warning("Consecutive runs with separate instances produce different results");
+        dump(res, f[0], f[1]);
+        r.push_back(res);
     } else {
         r.push_back(success());
     }
@@ -176,7 +178,9 @@ TestInterleavedRuns::test(string key)
     if (data) destroyTestAudio(data, channels);
 
     if (!(f[0] == f[1])) {
-        r.push_back(warning("Simultaneous runs with separate instances produce different results"));
+        Result res = warning("Simultaneous runs with separate instances produce different results");
+        dump(res, f[0], f[1]);
+        r.push_back(res);
     } else {
         r.push_back(success());
     }
@@ -213,7 +217,9 @@ TestDifferentStartTimes::test(string key)
     if (data) destroyTestAudio(data, channels);
 
     if (f[0] == f[1]) {
-        r.push_back(warning("Consecutive runs with different starting timestamps produce the same result"));
+        Result res = warning("Consecutive runs with different starting timestamps produce the same result");
+        dump(res, f[0], f[1]);
+        r.push_back(res);
     } else {
         r.push_back(success());
     }

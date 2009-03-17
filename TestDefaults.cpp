@@ -91,7 +91,9 @@ TestDefaultProgram::test(string key)
     if (data) destroyTestAudio(data, channels);
 
     if (!(f[0] == f[1])) {
-        r.push_back(warning("Explicitly setting current program to its supposed current value changes the results"));
+        Result res = warning("Explicitly setting current program to its supposed current value changes the results");
+        dump(res, f[0], f[1]);
+        r.push_back(res);
     } else {
         r.push_back(success());
     }
@@ -137,7 +139,9 @@ TestDefaultParameters::test(string key)
     if (data) destroyTestAudio(data, channels);
 
     if (!(f[0] == f[1])) {
-        r.push_back(warning("Explicitly setting parameters to their supposed default values changes the results"));
+        Result res = warning("Explicitly setting parameters to their supposed default values changes the results");
+        dump(res, f[0], f[1]);
+        r.push_back(res);
     } else {
         r.push_back(success());
     }
