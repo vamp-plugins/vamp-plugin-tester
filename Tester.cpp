@@ -113,20 +113,16 @@ Tester::test(int &notes, int &warnings, int &errors)
       * Initial value of a parameter on plugin construction differs
         from its default value (i.e. plugin produces different
         results depending on whether parameter is set explicitly by
-        host to default value or not)
+        host to default value or not) - DONE
         
       * If a plugin reports any programs, selecting default program
-        explicitly changes results (as for default parameters)
+        explicitly changes results (as for default parameters) - DONE
 
       * Output feature does not hasTimestamp when output type is
         VariableSampleRate - DONE
 
       * Output feature hasTimestamp or hasDuration when output type is
         OneSamplePerStep (warning only, this is not an error) - DONE
-
-      * Plugin fails gracelessly when constructed with "weird" sample
-        rate or initialised with "wrong" step size, block size, or
-        number of channels
 
       * Plugin returns features whose output numbers do not have
         a corresponding record in output descriptor list - DONE
@@ -136,7 +132,11 @@ Tester::test(int &notes, int &warnings, int &errors)
 
       * Constructor takes a long time to run.  A fuzzy concept, but
         suggests that some work should have been deferred to
-        initialise().  Warning only
+        initialise().  Warning only - DONE
+
+      * Plugin fails gracelessly when constructed with "weird" sample
+        rate or initialised with "wrong" step size, block size, or
+        number of channels
 
       Well, that's quite a lot of tests already.  What else?
 

@@ -63,5 +63,14 @@ protected:
     static Tester::TestRegistrar<TestDefaultParameters> m_registrar;
 };
 
+class TestLengthyConstructor : public Test
+{
+public:
+    TestLengthyConstructor() : Test() { }
+    Results test(std::string key);
+    
+protected:
+    static Tester::TestRegistrar<TestLengthyConstructor> m_registrar;
+};
 
 #endif

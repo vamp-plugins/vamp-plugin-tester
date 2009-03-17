@@ -46,12 +46,16 @@ using namespace Vamp;
 using namespace std;
 
 #include <cmath>
+#include <time.h>
 
 Tester::TestRegistrar<TestDefaultProgram>
 TestDefaultProgram::m_registrar("E1 Inconsistent default program");
 
 Tester::TestRegistrar<TestDefaultParameters>
 TestDefaultParameters::m_registrar("E2 Inconsistent default parameters");
+
+Tester::TestRegistrar<TestLengthyConstructor>
+TestLengthyConstructor::m_registrar("E3 Lengthy constructor");
 
 static const size_t _step = 1000;
 
@@ -140,3 +144,15 @@ TestDefaultParameters::test(string key)
 
     return r;
 }
+
+Test::Results
+TestLengthyConstructor::test(string key)
+{
+    time_t t0 = time(0);
+    auto_ptr<Plugin> p(load(key));
+    time_t t1 = time(0);
+    Results r;
+    if (t1 - t0 > 1) r.push_back(warning("Constructor takes some time to run: work should be deferred to initialise?"));
+    return r;
+}
+
