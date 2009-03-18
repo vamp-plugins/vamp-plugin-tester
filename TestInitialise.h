@@ -37,30 +37,30 @@
     authorization.
 */
 
-#ifndef _TEST_DEFAULTS_H_
-#define _TEST_DEFAULTS_H_
+#ifndef _TEST_INITIALISE_H_
+#define _TEST_INITIALISE_H_
 
 #include "Test.h"
 #include "Tester.h"
 
-class TestDefaultProgram : public Test
+class TestSampleRates : public Test
 {
 public:
-    TestDefaultProgram() : Test() { }
+    TestSampleRates() : Test() { }
     Results test(std::string key, Options options);
     
 protected:
-    static Tester::TestRegistrar<TestDefaultProgram> m_registrar;
+    static Tester::TestRegistrar<TestSampleRates> m_registrar;
 };
 
-class TestDefaultParameters : public Test
+class TestLengthyConstructor : public Test
 {
 public:
-    TestDefaultParameters() : Test() { }
+    TestLengthyConstructor() : Test() { }
     Results test(std::string key, Options options);
     
 protected:
-    static Tester::TestRegistrar<TestDefaultParameters> m_registrar;
+    static Tester::TestRegistrar<TestLengthyConstructor> m_registrar;
 };
 
 #endif
