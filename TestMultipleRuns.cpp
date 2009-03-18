@@ -229,7 +229,7 @@ TestDifferentStartTimes::test(string key, Options options)
         string message = "Consecutive runs with different starting timestamps produce the same result";
         Result res;
         if (options & NonDeterministic) res = note(message);
-        else res = error(message);
+        else res = warning(message);
         if (options & Verbose) dump(res, f[0], f[1]);
         r.push_back(res);
     } else {
