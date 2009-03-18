@@ -53,7 +53,7 @@ using namespace std;
 void usage(const char *name)
 {
     cerr << "\n"
-         << name << ": A Vamp plugin host that tests plugins for some likely errors.\n"
+         << name << ": A Vamp plugin host that tests plugins for common errors.\n"
         "Chris Cannam, Centre for Digital Music, Queen Mary, University of London.\n"
         "Copyright 2009 QMUL.\n"
         "Freely redistributable; published under a BSD-style license.\n\n"
