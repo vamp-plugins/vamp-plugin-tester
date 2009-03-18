@@ -116,7 +116,7 @@ TestReset::test(string key, Options options)
 
     for (int run = 0; run < 2; ++run) {
         if (run == 1) p->reset();
-        if (!initAdapted(p.get(), channels, _step, _step, r)) return r;
+        else if (!initAdapted(p.get(), channels, _step, _step, r)) return r;
         if (!data) data = createTestAudio(channels, _step, count);
         for (size_t i = 0; i < count; ++i) {
             float *ptr[channels];
