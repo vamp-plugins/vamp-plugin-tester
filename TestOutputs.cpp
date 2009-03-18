@@ -95,7 +95,7 @@ TestOutputNumbers::test(string key, Options options)
     }
     for (int o = 0; o < (int)outputs.size(); ++o) {
         if (used.find(o) == used.end()) {
-            r.push_back(note("No results returned for one or more outputs")); 
+            r.push_back(note("No results returned for output \"" + outputs[o].identifier + "\"")); 
         }
     }
                 
