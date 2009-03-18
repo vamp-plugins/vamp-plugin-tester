@@ -60,7 +60,7 @@ TestLengthyConstructor::m_registrar("E3 Lengthy constructor");
 static const size_t _step = 1000;
 
 Test::Results
-TestDefaultProgram::test(string key)
+TestDefaultProgram::test(string key, Options options)
 {
     Plugin::FeatureSet f[2];
     int rate = 44100;
@@ -91,8 +91,11 @@ TestDefaultProgram::test(string key)
     if (data) destroyTestAudio(data, channels);
 
     if (!(f[0] == f[1])) {
-        Result res = warning("Explicitly setting current program to its supposed current value changes the results");
-        dump(res, f[0], f[1]);
+        string message = "Explicitly setting current program to its supposed current value changes the results";
+        Result res;
+        if (options & NonDeterministic) res = note(message);
+        else res = error(message);
+        if (options & Verbose) dump(res, f[0], f[1]);
         r.push_back(res);
     } else {
         r.push_back(success());
@@ -102,7 +105,7 @@ TestDefaultProgram::test(string key)
 }
 
 Test::Results
-TestDefaultParameters::test(string key)
+TestDefaultParameters::test(string key, Options options)
 {
     Plugin::FeatureSet f[2];
     int rate = 44100;
@@ -139,8 +142,11 @@ TestDefaultParameters::test(string key)
     if (data) destroyTestAudio(data, channels);
 
     if (!(f[0] == f[1])) {
-        Result res = warning("Explicitly setting parameters to their supposed default values changes the results");
-        dump(res, f[0], f[1]);
+        string message = "Explicitly setting parameters to their supposed default values changes the results";
+        Result res;
+        if (options & NonDeterministic) res = note(message);
+        else res = error(message);
+        if (options & Verbose) dump(res, f[0], f[1]);
         r.push_back(res);
     } else {
         r.push_back(success());
@@ -150,7 +156,7 @@ TestDefaultParameters::test(string key)
 }
 
 Test::Results
-TestLengthyConstructor::test(string key)
+TestLengthyConstructor::test(string key, Options options)
 {
     time_t t0 = time(0);
     auto_ptr<Plugin> p(load(key));

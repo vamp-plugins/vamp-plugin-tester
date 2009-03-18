@@ -47,7 +47,7 @@ class TestDefaultProgram : public Test
 {
 public:
     TestDefaultProgram() : Test() { }
-    Results test(std::string key);
+    Results test(std::string key, Options options);
     
 protected:
     static Tester::TestRegistrar<TestDefaultProgram> m_registrar;
@@ -57,7 +57,7 @@ class TestDefaultParameters : public Test
 {
 public:
     TestDefaultParameters() : Test() { }
-    Results test(std::string key);
+    Results test(std::string key, Options options);
     
 protected:
     static Tester::TestRegistrar<TestDefaultParameters> m_registrar;
@@ -67,7 +67,7 @@ class TestLengthyConstructor : public Test
 {
 public:
     TestLengthyConstructor() : Test() { }
-    Results test(std::string key);
+    Results test(std::string key, Options options);
     
 protected:
     static Tester::TestRegistrar<TestLengthyConstructor> m_registrar;

@@ -62,7 +62,7 @@ TestDifferentStartTimes::m_registrar("D4 Consecutive runs with different start t
 static const size_t _step = 1000;
 
 Test::Results
-TestDistinctRuns::test(string key)
+TestDistinctRuns::test(string key, Options options)
 {
     Plugin::FeatureSet f[2];
     int rate = 44100;
@@ -89,8 +89,11 @@ TestDistinctRuns::test(string key)
     if (data) destroyTestAudio(data, channels);
 
     if (!(f[0] == f[1])) {
-        Result res = warning("Consecutive runs with separate instances produce different results");
-        dump(res, f[0], f[1]);
+        Result res;
+        string message = "Consecutive runs with separate instances produce different results";
+        if (options & NonDeterministic) res = note(message);
+        else res = error(message);
+        if (options & Verbose) dump(res, f[0], f[1]);
         r.push_back(res);
     } else {
         r.push_back(success());
@@ -100,7 +103,7 @@ TestDistinctRuns::test(string key)
 }
 
 Test::Results
-TestReset::test(string key)
+TestReset::test(string key, Options options)
 {
     Plugin::FeatureSet f[2];
     int rate = 44100;
@@ -129,8 +132,11 @@ TestReset::test(string key)
     if (data) destroyTestAudio(data, channels);
 
     if (!(f[0] == f[1])) {
-        Result res = warning("Consecutive runs with the same instance (using reset) produce different results");
-        dump(res, f[0], f[1]);
+        string message = "Consecutive runs with the same instance (using reset) produce different results";
+        Result res;
+        if (options & NonDeterministic) res = note(message);
+        else res = error(message);
+        if (options & Verbose) dump(res, f[0], f[1]);
         r.push_back(res);
     } else {
         r.push_back(success());
@@ -140,7 +146,7 @@ TestReset::test(string key)
 }
 
 Test::Results
-TestInterleavedRuns::test(string key)
+TestInterleavedRuns::test(string key, Options options)
 {
     Plugin::FeatureSet f[2];
     int rate = 44100;
@@ -178,8 +184,11 @@ TestInterleavedRuns::test(string key)
     if (data) destroyTestAudio(data, channels);
 
     if (!(f[0] == f[1])) {
-        Result res = warning("Simultaneous runs with separate instances produce different results");
-        dump(res, f[0], f[1]);
+        string message = "Simultaneous runs with separate instances produce different results";
+        Result res;
+        if (options & NonDeterministic) res = note(message);
+        else res = error(message);
+        if (options & Verbose) dump(res, f[0], f[1]);
         r.push_back(res);
     } else {
         r.push_back(success());
@@ -189,7 +198,7 @@ TestInterleavedRuns::test(string key)
 }
 
 Test::Results
-TestDifferentStartTimes::test(string key)
+TestDifferentStartTimes::test(string key, Options options)
 {
     Plugin::FeatureSet f[2];
     int rate = 44100;
@@ -217,8 +226,11 @@ TestDifferentStartTimes::test(string key)
     if (data) destroyTestAudio(data, channels);
 
     if (f[0] == f[1]) {
-        Result res = warning("Consecutive runs with different starting timestamps produce the same result");
-        dump(res, f[0], f[1]);
+        string message = "Consecutive runs with different starting timestamps produce the same result";
+        Result res;
+        if (options & NonDeterministic) res = note(message);
+        else res = error(message);
+        if (options & Verbose) dump(res, f[0], f[1]);
         r.push_back(res);
     } else {
         r.push_back(success());

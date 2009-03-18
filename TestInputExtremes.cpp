@@ -67,7 +67,7 @@ Tester::TestRegistrar<TestRandomInput>
 TestRandomInput::m_registrar("C6 Random input");
 
 Test::Results
-TestNormalInput::test(string key)
+TestNormalInput::test(string key, Options options)
 {
     Plugin::FeatureSet f;
     int rate = 44100;
@@ -95,12 +95,13 @@ TestNormalInput::test(string key)
         r.push_back(success());
     } else {
         r.push_back(warning("plugin returned one or more NaN/inf values"));
+        if (options & Verbose) dump(f);
     }
     return r;
 }
 
 Test::Results
-TestNoInput::test(string key)
+TestNoInput::test(string key, Options options)
 {
     auto_ptr<Plugin> p(load(key));
     Results r;
@@ -116,7 +117,7 @@ TestNoInput::test(string key)
 }
 
 Test::Results
-TestShortInput::test(string key)
+TestShortInput::test(string key, Options options)
 {
     Plugin::FeatureSet f;
     int rate = 44100;
@@ -141,12 +142,13 @@ TestShortInput::test(string key)
         r.push_back(success());
     } else {
         r.push_back(warning("plugin returned one or more NaN/inf values"));
+        if (options & Verbose) dump(f);
     }
     return r;
 }
 
 Test::Results
-TestSilentInput::test(string key)
+TestSilentInput::test(string key, Options options)
 {
     Plugin::FeatureSet f;
     int rate = 44100;
@@ -172,12 +174,13 @@ TestSilentInput::test(string key)
         r.push_back(success());
     } else {
         r.push_back(warning("plugin returned one or more NaN/inf values"));
+        if (options & Verbose) dump(f);
     }
     return r;
 }
 
 Test::Results
-TestTooLoudInput::test(string key)
+TestTooLoudInput::test(string key, Options options)
 {
     Plugin::FeatureSet f;
     int rate = 44100;
@@ -205,12 +208,13 @@ TestTooLoudInput::test(string key)
         r.push_back(success());
     } else {
         r.push_back(warning("plugin returned one or more NaN/inf values"));
+        if (options & Verbose) dump(f);
     }
     return r;
 }
 
 Test::Results
-TestRandomInput::test(string key)
+TestRandomInput::test(string key, Options options)
 {
     Plugin::FeatureSet f;
     int rate = 44100;
@@ -238,6 +242,7 @@ TestRandomInput::test(string key)
         r.push_back(success());
     } else {
         r.push_back(warning("plugin returned one or more NaN/inf values"));
+        if (options & Verbose) dump(f);
     }
     return r;
 }

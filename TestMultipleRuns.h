@@ -47,7 +47,7 @@ class TestDistinctRuns : public Test
 {
 public:
     TestDistinctRuns() : Test() { }
-    Results test(std::string key);
+    Results test(std::string key, Options options);
     
 protected:
     static Tester::TestRegistrar<TestDistinctRuns> m_registrar;
@@ -57,7 +57,7 @@ class TestReset : public Test
 {
 public:
     TestReset() : Test() { }
-    Results test(std::string key);
+    Results test(std::string key, Options options);
     
 protected:
     static Tester::TestRegistrar<TestReset> m_registrar;
@@ -67,7 +67,7 @@ class TestInterleavedRuns : public Test
 {
 public:
     TestInterleavedRuns() : Test() { }
-    Results test(std::string key);
+    Results test(std::string key, Options options);
     
 protected:
     static Tester::TestRegistrar<TestInterleavedRuns> m_registrar;
@@ -77,7 +77,7 @@ class TestDifferentStartTimes : public Test
 {
 public:
     TestDifferentStartTimes() : Test() { }
-    Results test(std::string key);
+    Results test(std::string key, Options options);
     
 protected:
     static Tester::TestRegistrar<TestDifferentStartTimes> m_registrar;

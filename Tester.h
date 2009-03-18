@@ -47,7 +47,7 @@
 class Tester
 {
 public:
-    Tester(std::string pluginKey);
+    Tester(std::string pluginKey, Test::Options);
     ~Tester();
 
     bool test(int &notes, int &warnings, int &errors);
@@ -71,6 +71,7 @@ public:
     
 protected:
     std::string m_key;
+    Test::Options m_options;
     typedef std::map<std::string, Registrar *> Registry;
     static Registry &registry();
 };

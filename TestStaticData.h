@@ -47,7 +47,7 @@ class TestIdentifiers : public Test
 {
 public:
     TestIdentifiers() : Test() { }
-    Results test(std::string key);
+    Results test(std::string key, Options options);
     
 protected:
     Result testIdentifier(std::string ident, std::string desc);
@@ -58,7 +58,7 @@ class TestEmptyFields : public Test
 {
 public:
     TestEmptyFields() : Test() { }
-    Results test(std::string key);
+    Results test(std::string key, Options options);
     
 protected:
     Result testMandatory(std::string text, std::string desc);
@@ -70,7 +70,7 @@ class TestValueRanges : public Test
 {
 public:
     TestValueRanges() : Test() { }
-    Results test(std::string key);
+    Results test(std::string key, Options options);
     
 protected:
     static Tester::TestRegistrar<TestValueRanges> m_registrar;

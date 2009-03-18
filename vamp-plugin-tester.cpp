@@ -44,6 +44,7 @@
 #include <iostream>
 
 #include <cstdlib>
+#include <cstring>
 
 #include "Tester.h"
 
@@ -57,11 +58,16 @@ void usage(const char *name)
         "Copyright 2009 QMUL.\n"
         "Freely redistributable; published under a BSD-style license.\n\n"
         "Usage:\n"
-        "  " << name << " [<pluginbasename>:<plugin>]\n\n"
+        "  " << name << " [-n] [-v] [<pluginbasename>:<plugin>]\n\n"
         "Example:\n"
         "  " << name << " vamp-example-plugins:amplitudefollower\n\n"
         "With an argument, tests one plugin; without, tests all plugins in Vamp path.\n"
-        "If you have access to a runtime memory checker, you may find it especially\n"
+        "\nOptions:\n"
+        "  --nondeterministic, -n    Plugins may be nondeterministic: print a note\n"
+        "                            instead of an error if results differ between runs\n"
+        "  --verbose, -v             Show returned features each time a note, warning,\n"
+        "                            or error arises from feature data\n"
+        "\nIf you have access to a runtime memory checker, you may find it especially\n"
         "helpful to run this tester under it and watch for errors thus provoked.\n"
          << endl;
     exit(2);
@@ -76,20 +82,44 @@ int main(int argc, char **argv)
         else ++scooter;
     }
     if (!name || !*name) name = argv[0];
-    
-    if (argc > 2) usage(name);
-    if (argc == 2 && argv[1][0] == '-') usage(name);
 
+    bool nondeterministic = false;
+    bool verbose = false;
+    string argument;
+    for (int i = 1; i < argc; ++i) {
+        if (!argv[i]) break;
+        if (argv[i][0] == '-') {
+            if (!strcmp(argv[i], "-v") ||
+                !strcmp(argv[i], "--verbose")) {
+                verbose = 1;
+                continue;
+            }
+            if (!strcmp(argv[i], "-n") ||
+                !strcmp(argv[i], "--nondeterministic")) {
+                nondeterministic = 1;
+                continue;
+            }
+            usage(name);
+        } else {
+            if (argument != "") usage(name);
+            else argument = argv[i];
+        }
+    }
+    
     cerr << name << ": Running..." << endl;
 
-    if (argc == 1) {
+    Test::Options opts = Test::NoOption;
+    if (nondeterministic) opts |= Test::NonDeterministic;
+    if (verbose) opts |= Test::Verbose;
+
+    if (argument == "") {
         bool good = true;
         Vamp::HostExt::PluginLoader::PluginKeyList keys =
             Vamp::HostExt::PluginLoader::getInstance()->listPlugins();
         int notes = 0, warnings = 0, errors = 0;
         for (int i = 0; i < (int)keys.size(); ++i) {
             cout << "Testing plugin: " << keys[i] << endl;
-            Tester tester(keys[i]);
+            Tester tester(keys[i], opts);
             if (tester.test(notes, warnings, errors)) {
                 cout << name << ": All tests succeeded for this plugin" << endl;
             } else {
@@ -115,8 +145,8 @@ int main(int argc, char **argv)
             return 1;
         }   
     } else {
-        string key = argv[1];
-        Tester tester(key);
+        string key = argument;
+        Tester tester(key, opts);
         int notes = 0, warnings = 0, errors = 0;
         if (tester.test(notes, warnings, errors)) {
             cout << name << ": All tests succeeded";

@@ -57,7 +57,7 @@ Tester::TestRegistrar<TestValueRanges>
 TestValueRanges::m_registrar("A3 Inappropriate value extents");
 
 Test::Results
-TestIdentifiers::test(string key)
+TestIdentifiers::test(string key, Options options)
 {
     auto_ptr<Plugin> p(load(key));
     
@@ -94,7 +94,7 @@ TestIdentifiers::testIdentifier(string identifier, string desc)
 }
 
 Test::Results
-TestEmptyFields::test(string key)
+TestEmptyFields::test(string key, Options options)
 {
     auto_ptr<Plugin> p(load(key));
 
@@ -147,7 +147,7 @@ TestEmptyFields::testRecommended(string text, string desc)
 }
 
 Test::Results
-TestValueRanges::test(string key)
+TestValueRanges::test(string key, Options options)
 {
     auto_ptr<Plugin> p(load(key));
 

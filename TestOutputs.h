@@ -47,7 +47,7 @@ class TestOutputNumbers : public Test
 {
 public:
     TestOutputNumbers() : Test() { }
-    Results test(std::string key);
+    Results test(std::string key, Options options);
     
 protected:
     static Tester::TestRegistrar<TestOutputNumbers> m_registrar;
@@ -57,7 +57,7 @@ class TestTimestamps : public Test
 {
 public:
     TestTimestamps() : Test() { }
-    Results test(std::string key);
+    Results test(std::string key, Options options);
     
 protected:
     static Tester::TestRegistrar<TestTimestamps> m_registrar;

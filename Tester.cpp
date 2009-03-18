@@ -59,8 +59,9 @@ using Vamp::HostExt::PluginInputDomainAdapter;
 
 using namespace std;
 
-Tester::Tester(std::string key) :
-    m_key(key)
+Tester::Tester(std::string key, Test::Options options) :
+    m_key(key),
+    m_options(options)
 {
 }
 
@@ -151,7 +152,7 @@ Tester::test(int &notes, int &warnings, int &errors)
             std::cout << " -- Performing test: " << i->first << std::endl;
 
             Test *test = i->second->makeTest();
-            Test::Results results = test->test(m_key);
+            Test::Results results = test->test(m_key, m_options);
             delete test;
 
             set<string> printed;

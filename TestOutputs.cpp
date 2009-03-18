@@ -59,7 +59,7 @@ TestTimestamps::m_registrar("B2 Invalid or dubious timestamp usage");
 static const size_t _step = 1000;
 
 Test::Results
-TestOutputNumbers::test(string key)
+TestOutputNumbers::test(string key, Options options)
 {
     int rate = 44100;
     auto_ptr<Plugin> p(load(key, rate));
@@ -99,11 +99,12 @@ TestOutputNumbers::test(string key)
         }
     }
                 
+    if (!r.empty() && (options & Verbose)) dump(f);
     return r;
 }
 
 Test::Results
-TestTimestamps::test(string key)
+TestTimestamps::test(string key, Options options)
 {
     int rate = 44100;
 
@@ -159,5 +160,6 @@ TestTimestamps::test(string key)
         }
     }
 
+    if (!r.empty() && (options & Verbose)) dump(f);
     return r;
 }

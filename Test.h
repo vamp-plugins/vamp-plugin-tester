@@ -48,17 +48,25 @@ class Test
 {
 public:
     virtual ~Test();
+
+    enum Option {
+        NoOption = 0x0,
+        NonDeterministic = 0x1,
+        Verbose = 0x2
+    };
+    typedef int Options;
     
     class Result {
 
     public:
         enum Code { Success, Note, Warning, Error };
 
+        Result() : m_code(Success) { }
         Result(Code c, std::string m) : m_code(c), m_message(m) { }
 
         Code code() const { return m_code; }
         std::string message() const { return m_message; }
-
+        
     protected:
         Code m_code;
         std::string m_message;
@@ -74,7 +82,7 @@ public:
     class FailedToLoadPlugin { };
 
     // may throw FailedToLoadPlugin
-    virtual Results test(std::string key) = 0;
+    virtual Results test(std::string key, Options) = 0;
 
 protected:
     Test();

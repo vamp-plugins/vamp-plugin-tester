@@ -51,7 +51,7 @@ class TestNormalInput : public Test
 {
 public:
     TestNormalInput() : Test() { }
-    Results test(std::string key);
+    Results test(std::string key, Options options);
 
 protected:
     static Tester::TestRegistrar<TestNormalInput> m_registrar;
@@ -61,7 +61,7 @@ class TestNoInput : public Test
 {
 public:
     TestNoInput() : Test() { }
-    Results test(std::string key);
+    Results test(std::string key, Options options);
 
 protected:
     static Tester::TestRegistrar<TestNoInput> m_registrar;
@@ -71,7 +71,7 @@ class TestShortInput : public Test
 {
 public:
     TestShortInput() : Test() { }
-    Results test(std::string key);
+    Results test(std::string key, Options options);
 
 protected:
     static Tester::TestRegistrar<TestShortInput> m_registrar;
@@ -81,7 +81,7 @@ class TestSilentInput : public Test
 {
 public:
     TestSilentInput() : Test() { }
-    Results test(std::string key);
+    Results test(std::string key, Options options);
 
 protected:
     static Tester::TestRegistrar<TestSilentInput> m_registrar;
@@ -91,7 +91,7 @@ class TestTooLoudInput : public Test
 {
 public:
     TestTooLoudInput() : Test() { }
-    Results test(std::string key);
+    Results test(std::string key, Options options);
 
 protected:
     static Tester::TestRegistrar<TestTooLoudInput> m_registrar;
@@ -101,7 +101,7 @@ class TestRandomInput : public Test
 {
 public:
     TestRandomInput() : Test() { }
-    Results test(std::string key);
+    Results test(std::string key, Options options);
 
 protected:
     static Tester::TestRegistrar<TestRandomInput> m_registrar;

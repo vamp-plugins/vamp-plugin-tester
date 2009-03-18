@@ -169,19 +169,19 @@ Test::dump(const Plugin::FeatureSet &fs)
     for (Plugin::FeatureSet::const_iterator fsi = fs.begin();
          fsi != fs.end(); ++fsi) {
         int output = fsi->first;
-        std::cerr << "Output " << output << ":" << std::endl;
+        std::cout << "Output " << output << ":" << std::endl;
         const Plugin::FeatureList &fl = fsi->second;
         for (int i = 0; i < (int)fl.size(); ++i) {
-            std::cerr << "  Feature " << i << ":" << std::endl;
+            std::cout << "  Feature " << i << ":" << std::endl;
             const Plugin::Feature &f = fl[i];
-            std::cerr << "    Timestamp: " << (f.hasTimestamp ? "(none)" : f.timestamp.toText()) << std::endl;
-            std::cerr << "    Duration: " << (f.hasDuration ? "(none)" : f.duration.toText()) << std::endl;
-            std::cerr << "    Label: " << (f.label == "" ? "(none)" : f.label) << std::endl;
-            std::cerr << "    Value: " << (f.values.empty() ? "(none)" : "");
+            std::cout << "    Timestamp: " << (f.hasTimestamp ? "(none)" : f.timestamp.toText()) << std::endl;
+            std::cout << "    Duration: " << (f.hasDuration ? "(none)" : f.duration.toText()) << std::endl;
+            std::cout << "    Label: " << (f.label == "" ? "(none)" : f.label) << std::endl;
+            std::cout << "    Value: " << (f.values.empty() ? "(none)" : "");
             for (int j = 0; j < (int)f.values.size(); ++j) {
-                std::cerr << f.values[j] << " ";
+                std::cout << f.values[j] << " ";
             }
-            std::cerr << std::endl;
+            std::cout << std::endl;
         }
     }
 }
@@ -191,12 +191,12 @@ Test::dump(const Result &r,
            const Plugin::FeatureSet &a,
            const Plugin::FeatureSet &b)
 {
-    std::cerr << r.message() << std::endl;
-    std::cerr << "\nFirst result set:" << std::endl;
+    std::cout << r.message() << std::endl;
+    std::cout << "\nFirst result set:" << std::endl;
     dump(a);
-    std::cerr << "\nSecond result set:" << std::endl;
+    std::cout << "\nSecond result set:" << std::endl;
     dump(b);
-    std::cerr << std::endl;
+    std::cout << std::endl;
 }
 
 bool
