@@ -44,7 +44,7 @@
 using namespace Vamp;
 using namespace Vamp::HostExt;
 
-#include <cmath>
+#include <math.h>
 
 Test::Test() { }
 Test::~Test() { }
