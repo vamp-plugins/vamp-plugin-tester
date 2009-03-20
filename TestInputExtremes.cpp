@@ -101,7 +101,7 @@ TestNormalInput::test(string key, Options options)
 }
 
 Test::Results
-TestNoInput::test(string key, Options options)
+TestNoInput::test(string key, Options)
 {
     auto_ptr<Plugin> p(load(key));
     Results r;
