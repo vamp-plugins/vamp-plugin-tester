@@ -213,3 +213,9 @@ Error and Warning Reference
  be done in the initialise() function rather than the constructor.
 
 
+Authors
+=======
+
+This program was written at the Centre for Digital Music at Queen
+Mary, University of London, by Chris Cannam.  Copyright (c) 2009 QMUL.
+
