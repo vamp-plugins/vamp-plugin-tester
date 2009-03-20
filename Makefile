@@ -19,7 +19,7 @@ depend:
 
 Test.o: Test.h
 TestDefaults.o: TestDefaults.h Test.h Tester.h
-TestInitialise.o: TestOutputs.h Test.h Tester.h
+TestInitialise.o: TestInitialise.h Test.h Tester.h
 TestInputExtremes.o: TestInputExtremes.h Test.h Tester.h
 TestMultipleRuns.o: TestMultipleRuns.h Test.h Tester.h
 TestOutputs.o: TestOutputs.h Test.h Tester.h

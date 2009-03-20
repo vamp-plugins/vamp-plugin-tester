@@ -61,7 +61,7 @@ Tester::TestRegistrar<TestSilentInput>
 TestSilentInput::m_registrar("C4 Absolutely silent input");
 
 Tester::TestRegistrar<TestTooLoudInput>
-TestTooLoudInput::m_registrar("C5 Input beyond expected +/-1 range");
+TestTooLoudInput::m_registrar("C5 Input beyond traditional +/-1 range");
 
 Tester::TestRegistrar<TestRandomInput>
 TestRandomInput::m_registrar("C6 Random input");

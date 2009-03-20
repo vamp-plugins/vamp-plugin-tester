@@ -59,14 +59,14 @@ TestLengthyConstructor::m_registrar("F2 Lengthy constructor");
 static const size_t _step = 1000;
 
 Test::Results
-TestSampleRates::test(string key, Options options)
+TestSampleRates::test(string key, Options)
 {
     int rates[] =
         { 1, 800, 10099, 11024, 44100, 48000, 96000, 192000, 201011, 1094091 };
 
     Results r;
 
-    for (int i = 0; i < sizeof(rates)/sizeof(rates[0]); ++i) {
+    for (int i = 0; i < int(sizeof(rates)/sizeof(rates[0])); ++i) {
     
         int rate = rates[i];
         auto_ptr<Plugin> p(load(key, rate));
@@ -100,7 +100,7 @@ TestSampleRates::test(string key, Options options)
 }
 
 Test::Results
-TestLengthyConstructor::test(string key, Options options)
+TestLengthyConstructor::test(string key, Options)
 {
     time_t t0 = time(0);
     auto_ptr<Plugin> p(load(key));
