@@ -227,7 +227,7 @@ TestRandomInput::test(string key, Options options)
     for (int i = 0; i < 100; ++i) {
         for (size_t j = 0; j < blocksize; ++j) {
             for (size_t c = 0; c < channels; ++c) {
-                block[c][j] = float(drand48() * 2.0 - 1.0);
+                block[c][j] = (float(rand()) / RAND_MAX) * 2.0 - 1.0;
             }
             ++idx;
         }
