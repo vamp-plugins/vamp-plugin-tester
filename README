@@ -1,0 +1,215 @@
+
+Vamp Plugin Tester
+==================
+
+This program tests Vamp audio feature extraction plugins
+(http://vamp-plugins.org/) for certain common failure cases.
+
+To test a single plugin, run vamp-plugin-tester with the name of your
+plugin library and plugin identifier, separated by a colon.  For example,
+
+  $ vamp-plugin-tester vamp-example-plugins:amplitudefollower
+
+The plugin library must be installed in the Vamp plugin path (you
+cannot give the path to the library file).
+
+If you run vamp-plugin-tester with no arguments, it will test all
+plugins found in your Vamp plugin path.
+
+
+Options
+=======
+
+Supply the -v or --verbose option to tell vamp-plugin-tester to print
+out the whole content of its returned feature log for diagnostic
+purposes each time it prints an error or warning that arises from the
+contents of a returned feature.
+
+Supply the -n or --nondeterministic option to tell vamp-plugin-tester
+that your plugins are expected to return different results each time
+they are run.  The default behaviour is to treat different results on
+separate runs with the same input data as an error.
+
+
+Errors and Warnings
+===================
+
+Each test may cause one or several notes, warnings, or errors to be
+printed.  A note is printed when behaviour is observed that may be
+correct behaviour but that is not always anticipated by the plugin
+developer.  A warning is printed when behaviour is observed that is
+technically legal but that in practice most often happens by mistake.
+An error is printed when behaviour is observed that cannot be correct.
+
+vamp-plugin-tester prints all of its commentary to the standard
+output.  Standard error is usually used for diagnostic output printed
+by the plugins themselves.
+
+In addition to reporting on tests, vamp-plugin-tester runs some tests
+that are intended to provoke the plugin into unexpected behaviour such
+as memory errors.  If vamp-plugin-tester crashes during a test, this
+may be why.  Also, if you have access to a memory checker utility such
+as valgrind, you are advised to run vamp-plugin-tester under it so as
+to be informed of any memory errors that do not happen to cause
+crashes.
+
+
+Error and Warning Reference
+===========================
+
+ ** ERROR: Failed to load plugin
+
+ The plugin could not be loaded.  Remember that the plugin must be
+ installed in the Vamp plugin path.
+
+ ** ERROR: (plugin|parameter|output) identifier <x> contains invalid characters
+
+ An identifier contains characters other than the permitted set (ASCII
+ lower and upper case letters, digits, "-" and "_" only).
+
+ ** ERROR: <field> is empty
+
+ A mandatory field, such as the name of a parameter or output,
+ contains no text.
+
+ ** WARNING: <field> is empty
+
+ An optional field, such as the description of a parameter or output,
+ contains no text.
+
+ ** ERROR: Plugin parameter <x> maxValue <= minValue
+
+ The minimum and maximum values given for a parameter are equal or in
+ the wrong order.
+
+ ** ERROR: Plugin parameter <x> defaultValue out of range
+
+ The default value for a parameter is not within the range defined by
+ the minimum and maximum values for the parameter.
+
+ ** ERROR: Plugin parameter <x> is quantized, but quantize step is zero
+
+ The quantizeStep value in a parameter with isQuantized true is set to
+ zero.
+
+ ** WARNING: Plugin parameter <x> value range is not a multiple of quantize step
+
+ A parameter's stated maximum value is not one of the possible values
+ obtained by adding multiples of the quantize step on to the minimum
+ value.
+
+ ** WARNING: Plugin parameter <x> has (more|fewer) value names than quantize steps
+
+ A quantized parameter lists some value names for its quantize steps,
+ but not the right number.
+ 
+ ** WARNING: Plugin parameter <x> default value is not a multiple of quantize
+ step beyond minimum
+
+ The default value for a parameter is not a value that the user could
+ actually obtain, if only offered the quantized values to choose from.
+
+ ** ERROR: Data returned on nonexistent output
+
+ The output number key for a returned feature is outside the range of
+ outputs listed in the plugin's output descriptor list.
+
+ ** NOTE: No results returned for output <x>
+
+ The plugin returned no features on one of its outputs, when given a
+ simple test file.  This may be perfectly reasonable behaviour, but
+ you might like to know about it.
+
+ ** NOTE: Plugin returns features with timestamps on OneSamplePerStep output
+ ** NOTE: Plugin returns features with durations on OneSamplePerStep output
+
+ Hosts will usually ignore timestamps and durations attached to any
+ feature returned on a OneSamplePerStep output.
+
+ ** ERROR: Plugin returns features with no timestamps on VariableSampleRate output
+
+ Timestamps are mandatory on all features associated with a
+ VariableSampleRate output.
+
+ ** WARNING: Plugin returned one or more NaN/inf values
+
+ The plugin returned features containing floating-point not-a-number
+ or infinity values.  This warning may be associated with a test
+ involving feeding some unexpected type of data to the plugin.
+ 
+ ** ERROR: Consecutive runs with separate instances produce different results
+
+ The plugin was constructed and run twice against the same input data,
+ and returned different features each time.
+
+ If you give the -n or --nondeterministic option, vamp-plugin-tester
+ will downgrade this error to a note.
+
+ ** ERROR: Consecutive runs with the same instance (using reset) produce different results
+
+ The plugin was constructed, initialised, run against some input data,
+ reset with a call to its reset() function, and run again against the
+ same data; and it returned different features on each run.  This is
+ often a sign of some simple error such as forgetting to implement
+ reset().
+
+ If you give the -n or --nondeterministic option, vamp-plugin-tester
+ will downgrade this error to a note.
+
+ ** ERROR: Simultaneous runs with separate instances produce different results
+
+ Two instances of the plugin were constructed and run against the same
+ input data, giving each block of data to one plugin's process call
+ and then to the other's, "interleaving" the processing between the
+ two instances (but within a single application thread); and the two
+ instances returned different features.  This may indicate ill-advised
+ use of static data shared between plugin instances.
+
+ If you give the -n or --nondeterministic option, vamp-plugin-tester
+ will downgrade this error to a note.
+
+ ** WARNING: Consecutive runs with different starting timestamps produce the same result
+
+ The plugin was run twice on the same audio data, but with different
+ input timestamps, and it returned the same results each time.  While
+ this is often unproblematic, it can indicate that a plugin failed to
+ take the input timestamp into account when calculating its output
+ timestamps (if any).
+
+ If you give the -n or --nondeterministic option, vamp-plugin-tester
+ will downgrade this warning to a note.
+
+ ** ERROR: Explicitly setting current program to its supposed current value changes the results
+
+ The plugin was constructed and run twice on the same data, once
+ without changing its "program" setting, and again having set the
+ program to the vaule returned by getCurrentProgram() (i.e. the same
+ program that was supposed to be in effect already).  It returned
+ different results for the two runs, suggesting that some internal
+ data was changed in selectProgram in a way that differed from its
+ default.
+
+ If you give the -n or --nondeterministic option, vamp-plugin-tester
+ will downgrade this error to a note.
+
+ ** ERROR: Explicitly setting parameters to their supposed default values changes the results
+
+ The plugin was constructed and run twice on the same data, once
+ without changing any of its parameters, and again having set the
+ parameters to their specified default values.  It returned different
+ results for the two runs, suggesting that some internal data was
+ changed when a parameter was set to its default, in a way that
+ differed from the plugin's initially constructed state.
+
+ If you give the -n or --nondeterministic option, vamp-plugin-tester
+ will downgrade this error to a note.
+
+ ** WARNING: Constructor takes some time to run: work should be deferred to initialise?
+
+ The plugin took a long time to construct.  You should ensure that the
+ constructor for the plugin runs as quickly as possible, because it
+ may be called by a host that is only scanning the properties of all
+ available plugins on startup.  Any serious initialisation work should
+ be done in the initialise() function rather than the constructor.
+
+

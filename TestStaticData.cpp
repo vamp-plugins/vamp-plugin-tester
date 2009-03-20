@@ -62,16 +62,16 @@ TestIdentifiers::test(string key, Options)
     auto_ptr<Plugin> p(load(key));
     
     Results r;
-    r.push_back(testIdentifier(p->getIdentifier(), "plugin identifier"));
+    r.push_back(testIdentifier(p->getIdentifier(), "Plugin identifier"));
 
     Plugin::ParameterList params = p->getParameterDescriptors();
     for (int i = 0; i < (int)params.size(); ++i) {
-        r.push_back(testIdentifier(params[i].identifier, "parameter identifier"));
+        r.push_back(testIdentifier(params[i].identifier, "Parameter identifier"));
     }
 
     Plugin::OutputList outputs = p->getOutputDescriptors();
     for (int i = 0; i < (int)outputs.size(); ++i) {
-        r.push_back(testIdentifier(outputs[i].identifier, "output identifier"));
+        r.push_back(testIdentifier(outputs[i].identifier, "Output identifier"));
     }
 
     return r;
@@ -100,29 +100,29 @@ TestEmptyFields::test(string key, Options)
 
     Results r;
 
-    r.push_back(testMandatory(p->getName(), "plugin name"));
-    r.push_back(testRecommended(p->getDescription(), "plugin description"));
-    r.push_back(testRecommended(p->getMaker(), "plugin maker"));
-    r.push_back(testRecommended(p->getCopyright(), "plugin copyright"));
+    r.push_back(testMandatory(p->getName(), "Plugin name"));
+    r.push_back(testRecommended(p->getDescription(), "Plugin description"));
+    r.push_back(testRecommended(p->getMaker(), "Plugin maker"));
+    r.push_back(testRecommended(p->getCopyright(), "Plugin copyright"));
     
     Plugin::ParameterList params = p->getParameterDescriptors();
     for (int i = 0; i < (int)params.size(); ++i) {
         r.push_back(testMandatory
                     (params[i].name,
-                     "plugin parameter \"" + params[i].identifier + "\" name"));
+                     "Plugin parameter \"" + params[i].identifier + "\" name"));
         r.push_back(testRecommended
                     (params[i].description,
-                     "plugin parameter \"" + params[i].identifier + "\" description"));
+                     "Plugin parameter \"" + params[i].identifier + "\" description"));
     }
     
     Plugin::OutputList outputs = p->getOutputDescriptors();
     for (int i = 0; i < (int)outputs.size(); ++i) {
         r.push_back(testMandatory
                     (outputs[i].name,
-                     "plugin output \"" + outputs[i].identifier + "\" name"));
+                     "Plugin output \"" + outputs[i].identifier + "\" name"));
         r.push_back(testRecommended
                     (outputs[i].description,
-                     "plugin output \"" + outputs[i].identifier + "\" description"));
+                     "Plugin output \"" + outputs[i].identifier + "\" description"));
     }
 
     return r;
@@ -156,7 +156,7 @@ TestValueRanges::test(string key, Options)
     Plugin::ParameterList params = p->getParameterDescriptors();
     for (int i = 0; i < (int)params.size(); ++i) {
         Plugin::ParameterDescriptor &pd(params[i]);
-        string pfx("plugin parameter \"" + pd.identifier + "\"");
+        string pfx("Plugin parameter \"" + pd.identifier + "\"");
         float min = pd.minValue;
         float max = pd.maxValue;
         float deft = pd.defaultValue;

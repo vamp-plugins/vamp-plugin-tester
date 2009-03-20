@@ -181,7 +181,7 @@ Tester::test(int &notes, int &warnings, int &errors)
             }
         }
     } catch (Test::FailedToLoadPlugin) {
-        std::cout << "ERROR: Failed to load plugin (key = \"" << m_key
+        std::cout << " ** ERROR: Failed to load plugin (key = \"" << m_key
                   << "\")" << std::endl;
     }
 

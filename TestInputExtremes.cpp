@@ -94,7 +94,7 @@ TestNormalInput::test(string key, Options options)
     if (allFeaturesValid(f)) {
         r.push_back(success());
     } else {
-        r.push_back(warning("plugin returned one or more NaN/inf values"));
+        r.push_back(warning("Plugin returned one or more NaN/inf values"));
         if (options & Verbose) dump(f);
     }
     return r;
@@ -111,7 +111,7 @@ TestNoInput::test(string key, Options)
     if (allFeaturesValid(fs)) {
         r.push_back(success());
     } else {
-        r.push_back(warning("plugin returned one or more NaN/inf values"));
+        r.push_back(warning("Plugin returned one or more NaN/inf values"));
     }
     return r;
 }
@@ -141,7 +141,7 @@ TestShortInput::test(string key, Options options)
     if (allFeaturesValid(f)) {
         r.push_back(success());
     } else {
-        r.push_back(warning("plugin returned one or more NaN/inf values"));
+        r.push_back(warning("Plugin returned one or more NaN/inf values"));
         if (options & Verbose) dump(f);
     }
     return r;
@@ -173,7 +173,7 @@ TestSilentInput::test(string key, Options options)
     if (allFeaturesValid(f)) {
         r.push_back(success());
     } else {
-        r.push_back(warning("plugin returned one or more NaN/inf values"));
+        r.push_back(warning("Plugin returned one or more NaN/inf values"));
         if (options & Verbose) dump(f);
     }
     return r;
@@ -207,7 +207,7 @@ TestTooLoudInput::test(string key, Options options)
     if (allFeaturesValid(f)) {
         r.push_back(success());
     } else {
-        r.push_back(warning("plugin returned one or more NaN/inf values"));
+        r.push_back(warning("Plugin returned one or more NaN/inf values"));
         if (options & Verbose) dump(f);
     }
     return r;
@@ -241,7 +241,7 @@ TestRandomInput::test(string key, Options options)
     if (allFeaturesValid(f)) {
         r.push_back(success());
     } else {
-        r.push_back(warning("plugin returned one or more NaN/inf values"));
+        r.push_back(warning("Plugin returned one or more NaN/inf values"));
         if (options & Verbose) dump(f);
     }
     return r;
