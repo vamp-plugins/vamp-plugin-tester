@@ -55,6 +55,7 @@ public:
     class Registrar {
     public:
         Registrar(std::string name) { Tester::registerTest(name, this); }
+        virtual ~Registrar() { }
         virtual Test *makeTest() = 0;
     };
     
