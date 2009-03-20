@@ -45,13 +45,15 @@ vamp-plugin-tester prints all of its commentary to the standard
 output.  Standard error is usually used for diagnostic output printed
 by the plugins themselves.
 
-In addition to reporting on tests, vamp-plugin-tester runs some tests
-that are intended to provoke the plugin into unexpected behaviour such
-as memory errors.  If vamp-plugin-tester crashes during a test, this
-may be why.  Also, if you have access to a memory checker utility such
-as valgrind, you are advised to run vamp-plugin-tester under it so as
-to be informed of any memory errors that do not happen to cause
-crashes.
+In addition to reports, vamp-plugin-tester runs some tests that are
+intended to provoke the plugin into unexpected behaviour such as
+memory errors.  If vamp-plugin-tester crashes during a test, this may
+be why.  If you have access to a memory checker utility such as
+valgrind, you are advised to run vamp-plugin-tester under it so as to
+be informed of any memory errors that do not happen to cause crashes
+(as well as memory leaks).  The vamp-plugin-tester binaries
+distributed by QMUL have been compiled with debug information
+included, in order to facilitate this type of use.
 
 
 Error and Warning Reference
