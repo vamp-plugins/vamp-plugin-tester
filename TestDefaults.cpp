@@ -118,6 +118,11 @@ TestDefaultParameters::test(string key, Options options)
             Plugin::ParameterList pl = p->getParameterDescriptors();
             for (int i = 0; i < (int)pl.size(); ++i) {
                 if (p->getParameter(pl[i].identifier) != pl[i].defaultValue) {
+                    if (options & Verbose) {
+                        cout << "Parameter: " << pl[i].identifier << endl;
+                        cout << "Expected: " << pl[i].defaultValue << endl;
+                        cout << "Actual: " << p->getParameter(pl[i].identifier) << endl;
+                    }
                     r.push_back(error("Not all parameters have their default values when queried directly after construction"));
                 }
                 p->setParameter(pl[i].identifier, pl[i].defaultValue);

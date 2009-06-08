@@ -59,23 +59,41 @@ TestLengthyConstructor::m_registrar("F2 Lengthy constructor");
 static const size_t _step = 1000;
 
 Test::Results
-TestSampleRates::test(string key, Options)
+TestSampleRates::test(string key, Options options)
 {
     int rates[] =
         { 1, 800, 10099, 11024, 44100, 48000, 96000, 192000, 201011, 1094091 };
 
     Results r;
 
+    if (options & Verbose) {
+        cout << "    ";
+    }
+
     for (int i = 0; i < int(sizeof(rates)/sizeof(rates[0])); ++i) {
     
         int rate = rates[i];
+
+        if (options & Verbose) {
+            cout << "[" << rate << "Hz] " << flush;
+        }
+
         auto_ptr<Plugin> p(load(key, rate));
         Plugin::FeatureSet f;
         float **data = 0;
         size_t channels = 0;
         size_t count = 100;
 
-        if (!initAdapted(p.get(), channels, _step, _step, r)) continue;
+        Results subr;
+        if (!initAdapted(p.get(), channels, _step, _step, subr)) {
+            // This is not an error; the plugin can legitimately
+            // refuse to initialise at weird settings and that's often
+            // the most acceptable result
+            if (!subr.empty()) {
+                r.push_back(note(subr.begin()->message()));
+            }
+            continue;
+        }
 
         data = createTestAudio(channels, _step, count);
         for (size_t i = 0; i < count; ++i) {
@@ -90,6 +108,8 @@ TestSampleRates::test(string key, Options)
         appendFeatures(f, fs);
         destroyTestAudio(data, channels);
     }
+
+    if (options & Verbose) cout << endl;
 
     // We can't actually do anything meaningful with our results.
     // We're really just testing to see whether the plugin crashes.  I

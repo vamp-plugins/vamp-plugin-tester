@@ -52,8 +52,10 @@ Test::~Test() { }
 Plugin *
 Test::load(std::string key, float rate)
 {
-    return PluginLoader::getInstance()->loadPlugin
+    Plugin *p = PluginLoader::getInstance()->loadPlugin
         (key, rate, PluginLoader::ADAPT_ALL);
+    if (!p) throw FailedToLoadPlugin();
+    return p;
 }
 
 float **
