@@ -58,14 +58,15 @@ void usage(const char *name)
         "Copyright 2009 QMUL.\n"
         "Freely redistributable; published under a BSD-style license.\n\n"
         "Usage:\n"
-        "  " << name << " [-n] [-v] [<pluginbasename>:<plugin>]\n\n"
+        "  " << name << " [-nv] <pluginbasename>:<plugin>\n"
+        "  " << name << " [-nv] -a\n\n"
         "Example:\n"
         "  " << name << " vamp-example-plugins:amplitudefollower\n\n"
-        "With an argument, tests one plugin; without, tests all plugins in Vamp path.\n"
-        "\nOptions:\n"
-        "  --nondeterministic, -n    Plugins may be nondeterministic: print a note\n"
-        "                            instead of an error if results differ between runs\n"
-        "  --verbose, -v             Show returned features each time a note, warning,\n"
+        "Options:\n"
+        "  -a, --all                 Test all plugins found in Vamp path\n\n"
+        "  -n, --nondeterministic    Plugins may be nondeterministic: print a note\n"
+        "                            instead of an error if results differ between runs\n\n"
+        "  -v, --verbose             Show returned features each time a note, warning,\n"
         "                            or error arises from feature data\n"
         "\nIf you have access to a runtime memory checker, you may find it especially\n"
         "helpful to run this tester under it and watch for errors thus provoked.\n"
@@ -85,18 +86,24 @@ int main(int argc, char **argv)
 
     bool nondeterministic = false;
     bool verbose = false;
+    bool all = false;
     string argument;
     for (int i = 1; i < argc; ++i) {
         if (!argv[i]) break;
         if (argv[i][0] == '-') {
             if (!strcmp(argv[i], "-v") ||
                 !strcmp(argv[i], "--verbose")) {
-                verbose = 1;
+                verbose = true;
                 continue;
             }
             if (!strcmp(argv[i], "-n") ||
                 !strcmp(argv[i], "--nondeterministic")) {
-                nondeterministic = 1;
+                nondeterministic = true;
+                continue;
+            }
+            if (!strcmp(argv[i], "-a") ||
+                !strcmp(argv[i], "--all")) {
+                all = true;
                 continue;
             }
             usage(name);
@@ -106,13 +113,16 @@ int main(int argc, char **argv)
         }
     }
     
+    if (argument == "" && !all) usage(name);
+    if (argument != "" &&  all) usage(name);
+
     cerr << name << ": Running..." << endl;
 
     Test::Options opts = Test::NoOption;
     if (nondeterministic) opts |= Test::NonDeterministic;
     if (verbose) opts |= Test::Verbose;
 
-    if (argument == "") {
+    if (all) {
         bool good = true;
         Vamp::HostExt::PluginLoader::PluginKeyList keys =
             Vamp::HostExt::PluginLoader::getInstance()->listPlugins();

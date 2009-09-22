@@ -81,7 +81,7 @@ Error and Warning Reference
 
    No valid <name> found in Vamp path
 
-    - No Vamp plugin library of that name was found in the path.
+    - No Vamp plugin library of that name was found in the Vamp path.
       This message will often be accompanied by one of the following
       errors; if it isn't, then that probably means the file did not
       exist at all.

@@ -183,6 +183,11 @@ Tester::test(int &notes, int &warnings, int &errors)
     } catch (Test::FailedToLoadPlugin) {
         std::cout << " ** ERROR: Failed to load plugin (key = \"" << m_key
                   << "\")" << std::endl;
+        std::cout << " ** NOTE: Vamp plugin path is: " << std::endl;
+        std::vector<std::string> pp = PluginHostAdapter::getPluginPath();
+        for (size_t i = 0; i < pp.size(); ++i) {
+            std::cout << "            " << pp[i] << std::endl;
+        }
     }
 
     return good;
