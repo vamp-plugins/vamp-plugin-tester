@@ -64,6 +64,47 @@ Error and Warning Reference
  The plugin could not be loaded.  Remember that the plugin must be
  installed in the Vamp plugin path.
 
+ Normally this message will be preceded by one of the following
+ errors:
+
+   Invalid plugin key <key>
+
+    - You have perhaps mistyped the argument to vamp-plugin-tester?
+
+   Plugin <id> not found in library <name>
+
+    - The library was found and loaded and was apparently a valid
+      Vamp plugin library, but it didn't contain a plugin of that id.
+      Check you typed the id correctly, and if this is your library,
+      check that the vampGetPluginDescriptor function returns the
+      plugin descriptor properly.
+
+   No valid <name> found in Vamp path
+
+    - No Vamp plugin library of that name was found in the path.
+      This message will often be accompanied by one of the following
+      errors; if it isn't, then that probably means the file did not
+      exist at all.
+
+   Unable to load library <name>
+
+    - A dynamic library of that name was found, but the system library
+      loader could not load it.  Perhaps it depends on another library
+      that is not available, or it was built for the wrong architecture?
+
+   No vampGetPluginDescriptor function found in library <name>
+
+    - A dynamic library of that name was found and loaded, but it
+      lacked the necessary public vampGetPluginDescriptor function.
+
+      * Are you sure this is a Vamp plugin library?
+      * If you made it, did you remember to include the global
+        vampGetPluginDescriptor function in your library along with
+	your plugin classes?
+      * If you are using Visual C++, did you remember to mark the
+        vampGetPluginDescriptor symbol exported, as described in
+        the README.msvc file in the SDK?
+
  ** ERROR: (plugin|parameter|output) identifier <x> contains invalid characters
 
  An identifier contains characters other than the permitted set (ASCII
