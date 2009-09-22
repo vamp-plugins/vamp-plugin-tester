@@ -188,6 +188,7 @@ Tester::test(int &notes, int &warnings, int &errors)
         for (size_t i = 0; i < pp.size(); ++i) {
             std::cout << "            " << pp[i] << std::endl;
         }
+        good = false;
     }
 
     return good;

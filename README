@@ -67,9 +67,18 @@ Error and Warning Reference
  Normally this message will be preceded by one of the following
  errors:
 
-   Invalid plugin key <key>
+   Invalid plugin key <key> in loadPlugin
 
-    - You have perhaps mistyped the argument to vamp-plugin-tester?
+    - The argument given to vamp-plugin-tester could not be split
+      into library name and plugin identifier.  Check the usage
+      description above.
+
+   No library found in Vamp path for plugin <key>
+
+    - No Vamp plugin library of that name was found in the Vamp path.
+      This message will often be accompanied by one of the following
+      errors; if it isn't, then that probably means the file did not
+      exist at all.
 
    Plugin <id> not found in library <name>
 
@@ -79,18 +88,12 @@ Error and Warning Reference
       check that the vampGetPluginDescriptor function returns the
       plugin descriptor properly.
 
-   No valid <name> found in Vamp path
-
-    - No Vamp plugin library of that name was found in the Vamp path.
-      This message will often be accompanied by one of the following
-      errors; if it isn't, then that probably means the file did not
-      exist at all.
-
    Unable to load library <name>
 
     - A dynamic library of that name was found, but the system library
       loader could not load it.  Perhaps it depends on another library
-      that is not available, or it was built for the wrong architecture?
+      that is not available, or it was built for the wrong architecture.
+      There may be more information in the error message.
 
    No vampGetPluginDescriptor function found in library <name>
 
