@@ -13,12 +13,12 @@ plugin library and plugin identifier, separated by a colon.  For example,
 The plugin library must be installed in the Vamp plugin path (you
 cannot give the path to the library file).
 
-If you run vamp-plugin-tester with no arguments, it will test all
-plugins found in your Vamp plugin path.
-
 
 Options
 =======
+
+Supply the -a or --all option to tell vamp-plugin-tester to test all
+plugins found in your Vamp path.
 
 Supply the -v or --verbose option to tell vamp-plugin-tester to print
 out the whole content of its returned feature log for diagnostic
