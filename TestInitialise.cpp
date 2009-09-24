@@ -50,6 +50,10 @@ using namespace std;
 
 #include <cmath>
 
+#ifndef __GNUC__
+#include <alloca.h>
+#endif
+
 Tester::TestRegistrar<TestSampleRates>
 TestSampleRates::m_registrar("F1 Different sample rates");
 
@@ -97,7 +101,11 @@ TestSampleRates::test(string key, Options options)
 
         data = createTestAudio(channels, _step, count);
         for (size_t i = 0; i < count; ++i) {
+#ifdef __GNUC__
             float *ptr[channels];
+#else
+            float **ptr = (float **)alloca(channels * sizeof(float));
+#endif
             size_t idx = i * _step;
             for (size_t c = 0; c < channels; ++c) ptr[c] = data[c] + idx;
             RealTime timestamp = RealTime::frame2RealTime(idx, rate);

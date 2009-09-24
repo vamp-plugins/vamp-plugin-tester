@@ -50,6 +50,10 @@ using namespace std;
 
 #include <cmath>
 
+#ifndef __GNUC__
+#include <alloca.h>
+#endif
+
 Tester::TestRegistrar<TestOutputNumbers>
 TestOutputNumbers::m_registrar("B1 Output number mismatching");
 
@@ -72,7 +76,11 @@ TestOutputNumbers::test(string key, Options options)
     if (!initAdapted(p.get(), channels, _step, _step, r)) return r;
     if (!data) data = createTestAudio(channels, _step, count);
     for (size_t i = 0; i < count; ++i) {
+#ifdef __GNUC__
         float *ptr[channels];
+#else
+        float **ptr = (float **)alloca(channels * sizeof(float));
+#endif
         size_t idx = i * _step;
         for (size_t c = 0; c < channels; ++c) ptr[c] = data[c] + idx;
         RealTime timestamp = RealTime::frame2RealTime(idx, rate);
@@ -122,7 +130,11 @@ TestTimestamps::test(string key, Options options)
     if (!initDefaults(p.get(), channels, step, block, r)) return r;
     if (!data) data = createTestAudio(channels, block, count);
     for (size_t i = 0; i < count; ++i) {
+#ifdef __GNUC__
         float *ptr[channels];
+#else
+        float **ptr = (float **)alloca(channels * sizeof(float));
+#endif
         size_t idx = i * step;
         for (size_t c = 0; c < channels; ++c) ptr[c] = data[c] + idx;
         RealTime timestamp = RealTime::frame2RealTime(idx, rate);

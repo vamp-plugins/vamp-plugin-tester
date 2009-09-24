@@ -46,6 +46,11 @@ using namespace Vamp::HostExt;
 
 #include <math.h>
 
+#ifdef __SUNPRO_CC
+#include <ieeefp.h>
+#define isinf(x) (!finite(x))
+#endif
+
 Test::Test() { }
 Test::~Test() { }
 
