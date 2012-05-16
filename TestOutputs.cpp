@@ -155,17 +155,17 @@ TestTimestamps::test(string key, Options options)
             switch (o.sampleType) {
             case Plugin::OutputDescriptor::OneSamplePerStep:
                 if (fe.hasTimestamp) {
-                    r.push_back(note("Plugin returns features with timestamps on OneSamplePerStep output"));
+                    r.push_back(note("Plugin returns features with timestamps on OneSamplePerStep output \"" + o.identifier + "\""));
                 }
                 if (fe.hasDuration) {
-                    r.push_back(note("Plugin returns features with durations on OneSamplePerStep output"));
+                    r.push_back(note("Plugin returns features with durations on OneSamplePerStep output \"" + o.identifier + "\""));
                 }
                 break;
             case Plugin::OutputDescriptor::FixedSampleRate:
                 break;
             case Plugin::OutputDescriptor::VariableSampleRate:
                 if (!fe.hasTimestamp) {
-                    r.push_back(error("Plugin returns features with no timestamps on VariableSampleRate output"));
+                    r.push_back(error("Plugin returns features with no timestamps on VariableSampleRate output \"" + o.identifier + "\""));
                 }
                 break;
             }
