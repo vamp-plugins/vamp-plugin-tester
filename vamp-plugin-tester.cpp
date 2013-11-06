@@ -126,6 +126,10 @@ int main(int argc, char **argv)
         bool good = true;
         Vamp::HostExt::PluginLoader::PluginKeyList keys =
             Vamp::HostExt::PluginLoader::getInstance()->listPlugins();
+        if (keys.size() == 0) {
+            cout << name << ": NOTE: No plugins found!" << endl;
+            cout << name << ": (No libraries in search path, or no descriptors in library)" << endl;
+        }
         int notes = 0, warnings = 0, errors = 0;
         for (int i = 0; i < (int)keys.size(); ++i) {
             cout << "Testing plugin: " << keys[i] << endl;
