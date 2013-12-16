@@ -63,4 +63,14 @@ protected:
     static Tester::TestRegistrar<TestDefaultParameters> m_registrar;
 };
 
+class TestParametersOnReset : public Test
+{
+public:
+    TestParametersOnReset() : Test() { }
+    Results test(std::string key, Options options);
+    
+protected:
+    static Tester::TestRegistrar<TestParametersOnReset> m_registrar;
+};
+
 #endif

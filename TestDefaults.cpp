@@ -58,6 +58,9 @@ TestDefaultProgram::m_registrar("E1 Inconsistent default program");
 Tester::TestRegistrar<TestDefaultParameters>
 TestDefaultParameters::m_registrar("E2 Inconsistent default parameters");
 
+Tester::TestRegistrar<TestParametersOnReset>
+TestParametersOnReset::m_registrar("E3 Parameter retention through reset");
+
 static const size_t _step = 1000;
 
 Test::Results
@@ -157,6 +160,69 @@ TestDefaultParameters::test(string key, Options options)
 
     if (!(f[0] == f[1])) {
         string message = "Explicitly setting parameters to their supposed default values changes the results";
+        Result res;
+        if (options & NonDeterministic) res = note(message);
+        else res = error(message);
+        if (options & Verbose) dump(res, f[0], f[1]);
+        r.push_back(res);
+    } else {
+        r.push_back(success());
+    }
+
+    return r;
+}
+
+Test::Results
+TestParametersOnReset::test(string key, Options options)
+{
+    Plugin::FeatureSet f[2];
+    int rate = 44100;
+    Results r;
+    float **data = 0;
+    size_t channels = 0;
+    size_t count = 100;
+
+    for (int run = 0; run < 2; ++run) {
+        auto_ptr<Plugin> p(load(key, rate));
+	if (p->getParameterDescriptors().empty()) return r;
+
+        // Set all parameters to non-default values
+        Plugin::ParameterList pl = p->getParameterDescriptors();
+        for (int i = 0; i < (int)pl.size(); ++i) {
+            if (pl[i].defaultValue == pl[i].minValue) {
+                p->setParameter(pl[i].identifier, pl[i].maxValue);
+            } else {
+                p->setParameter(pl[i].identifier, pl[i].minValue);
+            }
+        }
+
+        if (!initAdapted(p.get(), channels, _step, _step, r)) return r;
+
+        //  First run: construct, set params, init, process
+        // Second run: construct, set params, init, reset, process
+        // We expect these to produce the same results
+        if (run == 1) p->reset();
+
+        if (!data) data = createTestAudio(channels, _step, count);
+        for (size_t i = 0; i < count; ++i) {
+#ifdef __GNUC__
+            float *ptr[channels];
+#else
+            float **ptr = (float **)alloca(channels * sizeof(float));
+#endif
+            size_t idx = i * _step;
+            for (size_t c = 0; c < channels; ++c) ptr[c] = data[c] + idx;
+            RealTime timestamp = RealTime::frame2RealTime(idx, rate);
+            Plugin::FeatureSet fs = p->process(ptr, timestamp);
+            appendFeatures(f[run], fs);
+        }
+        Plugin::FeatureSet fs = p->getRemainingFeatures();
+        appendFeatures(f[run], fs);
+    }
+    if (data) destroyTestAudio(data, channels);
+
+    if (!(f[0] == f[1])) {
+        string message = "Call to reset after setting parameters, but before processing, changes the results (parameter values not retained through reset?)";
         Result res;
         if (options & NonDeterministic) res = note(message);
         else res = error(message);
