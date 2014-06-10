@@ -76,4 +76,14 @@ protected:
     static Tester::TestRegistrar<TestValueRanges> m_registrar;
 };
 
+class TestCategory : public Test
+{
+public:
+    TestCategory() : Test() { }
+    Results test(std::string key, Options options);
+    
+protected:
+    static Tester::TestRegistrar<TestCategory> m_registrar;
+};
+
 #endif

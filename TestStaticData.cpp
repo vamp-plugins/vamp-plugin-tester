@@ -40,7 +40,9 @@
 #include "TestStaticData.h"
 
 #include <vamp-hostsdk/Plugin.h>
+#include <vamp-hostsdk/PluginLoader.h>
 using namespace Vamp;
+using namespace Vamp::HostExt;
 
 #include <memory>
 using namespace std;
@@ -55,6 +57,9 @@ TestEmptyFields::m_registrar("A2 Empty metadata fields");
 
 Tester::TestRegistrar<TestValueRanges>
 TestValueRanges::m_registrar("A3 Inappropriate value extents");
+
+Tester::TestRegistrar<TestCategory>
+TestCategory::m_registrar("A3 Missing category");
 
 Test::Results
 TestIdentifiers::test(string key, Options)
@@ -198,4 +203,18 @@ TestValueRanges::test(string key, Options)
     return r;
 }
 
+Test::Results
+TestCategory::test(string key, Options)
+{
+    PluginLoader::PluginCategoryHierarchy hierarchy =
+        PluginLoader::getInstance()->getPluginCategory(key);
+    
+    Results r;
+
+    if (hierarchy.empty()) {
+        r.push_back(warning("Plugin category missing or cannot be loaded (no .cat file?)"));
+    }
+
+    return r;
+}
 
