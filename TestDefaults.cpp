@@ -187,13 +187,41 @@ TestParametersOnReset::test(string key, Options options)
 	if (p->getParameterDescriptors().empty()) return r;
 
         // Set all parameters to non-default values
+
         Plugin::ParameterList pl = p->getParameterDescriptors();
+
         for (int i = 0; i < (int)pl.size(); ++i) {
-            if (pl[i].defaultValue == pl[i].minValue) {
-                p->setParameter(pl[i].identifier, pl[i].maxValue);
-            } else {
-                p->setParameter(pl[i].identifier, pl[i].minValue);
+
+            // Half-way between default and max value, seems a
+            // reasonable guess for something to set it to. We want to
+            // avoid the real extremes because they can sometimes be
+            // very slow, and we want to avoid setting everything to
+            // the same values (e.g. min) because plugins will
+            // sometimes legitimately reject that.
+
+            // Remember to take into account quantization
+
+            float value = (pl[i].defaultValue + pl[i].maxValue) / 2;
+
+            if (pl[i].isQuantized) {
+                value = round(value / pl[i].quantizeStep) * pl[i].quantizeStep;
             }
+
+            if (value > pl[i].maxValue) {
+                value = pl[i].maxValue;
+            }
+            if (value < pl[i].minValue) {
+                value = pl[i].minValue;
+            }
+            if (value == pl[i].defaultValue) {
+                if (pl[i].defaultValue == pl[i].minValue) {
+                    value = pl[i].maxValue;
+                } else {
+                    value = pl[i].minValue;
+                }
+            }
+
+            p->setParameter(pl[i].identifier, value);
         }
 
         if (!initAdapted(p.get(), channels, _step, _step, r)) return r;
