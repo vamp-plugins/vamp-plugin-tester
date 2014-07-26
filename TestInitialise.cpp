@@ -66,7 +66,7 @@ Test::Results
 TestSampleRates::test(string key, Options options)
 {
     int rates[] =
-        { 1, 800, 10099, 11024, 44100, 48000, 96000, 192000, 201011, 1094091 };
+        { 11, 800, 10099, 11024, 44100, 48000, 96000, 192000, 201011, 1094091 };
 
     Results r;
 
