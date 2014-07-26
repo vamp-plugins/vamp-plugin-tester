@@ -129,6 +129,7 @@ int main(int argc, char **argv)
         if (keys.size() == 0) {
             cout << name << ": NOTE: No plugins found!" << endl;
             cout << name << ": (No libraries in search path, or no descriptors in library)" << endl;
+            return 2;
         }
         int notes = 0, warnings = 0, errors = 0;
         for (int i = 0; i < (int)keys.size(); ++i) {
