@@ -52,16 +52,16 @@ using namespace std;
 #endif
 
 Tester::TestRegistrar<TestDistinctRuns>
-TestDistinctRuns::m_registrar("D1 Consecutive runs with separate instances");
+TestDistinctRuns::m_registrar("D1", "Consecutive runs with separate instances");
 
 Tester::TestRegistrar<TestReset>
-TestReset::m_registrar("D2 Consecutive runs with a single instance using reset");
+TestReset::m_registrar("D2", "Consecutive runs with a single instance using reset");
 
 Tester::TestRegistrar<TestInterleavedRuns>
-TestInterleavedRuns::m_registrar("D3 Simultaneous interleaved runs in a single thread");
+TestInterleavedRuns::m_registrar("D3", "Simultaneous interleaved runs in a single thread");
 
 Tester::TestRegistrar<TestDifferentStartTimes>
-TestDifferentStartTimes::m_registrar("D4 Consecutive runs with different start times");
+TestDifferentStartTimes::m_registrar("D4", "Consecutive runs with different start times");
 
 static const size_t _step = 1000;
 

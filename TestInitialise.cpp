@@ -55,10 +55,10 @@ using namespace std;
 #endif
 
 Tester::TestRegistrar<TestSampleRates>
-TestSampleRates::m_registrar("F1 Different sample rates");
+TestSampleRates::m_registrar("F1", "Different sample rates");
 
 Tester::TestRegistrar<TestLengthyConstructor>
-TestLengthyConstructor::m_registrar("F2 Lengthy constructor");
+TestLengthyConstructor::m_registrar("F2", "Lengthy constructor");
 
 static const size_t _step = 1000;
 

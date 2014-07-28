@@ -50,9 +50,10 @@ public:
     virtual ~Test();
 
     enum Option {
-        NoOption = 0x0,
-        NonDeterministic = 0x1,
-        Verbose = 0x2
+        NoOption           = 0x0,
+        NonDeterministic   = 0x1,
+        Verbose            = 0x2,
+        SingleTest         = 0x4
     };
     typedef int Options;
     

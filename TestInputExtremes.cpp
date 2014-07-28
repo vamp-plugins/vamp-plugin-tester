@@ -49,22 +49,22 @@ using namespace std;
 #include <cmath>
 
 Tester::TestRegistrar<TestNormalInput>
-TestNormalInput::m_registrar("C1 Normal input");
+TestNormalInput::m_registrar("C1", "Normal input");
 
 Tester::TestRegistrar<TestNoInput>
-TestNoInput::m_registrar("C2 Empty input");
+TestNoInput::m_registrar("C2", "Empty input");
 
 Tester::TestRegistrar<TestShortInput>
-TestShortInput::m_registrar("C3 Short input");
+TestShortInput::m_registrar("C3", "Short input");
 
 Tester::TestRegistrar<TestSilentInput>
-TestSilentInput::m_registrar("C4 Absolutely silent input");
+TestSilentInput::m_registrar("C4", "Absolutely silent input");
 
 Tester::TestRegistrar<TestTooLoudInput>
-TestTooLoudInput::m_registrar("C5 Input beyond traditional +/-1 range");
+TestTooLoudInput::m_registrar("C5", "Input beyond traditional +/-1 range");
 
 Tester::TestRegistrar<TestRandomInput>
-TestRandomInput::m_registrar("C6 Random input");
+TestRandomInput::m_registrar("C6", "Random input");
 
 Test::Results
 TestNormalInput::test(string key, Options options)

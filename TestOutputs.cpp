@@ -55,10 +55,10 @@ using namespace std;
 #endif
 
 Tester::TestRegistrar<TestOutputNumbers>
-TestOutputNumbers::m_registrar("B1 Output number mismatching");
+TestOutputNumbers::m_registrar("B1", "Output number mismatching");
 
 Tester::TestRegistrar<TestTimestamps>
-TestTimestamps::m_registrar("B2 Invalid or dubious timestamp usage");
+TestTimestamps::m_registrar("B2", "Invalid or dubious timestamp usage");
 
 static const size_t _step = 1000;
 

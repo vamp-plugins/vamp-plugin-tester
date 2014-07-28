@@ -59,14 +59,22 @@ using Vamp::HostExt::PluginInputDomainAdapter;
 
 using namespace std;
 
-Tester::Tester(std::string key, Test::Options options) :
+Tester::Tester(std::string key, Test::Options options, std::string singleTestId) :
     m_key(key),
-    m_options(options)
+    m_options(options),
+    m_singleTest(singleTestId)
 {
 }
 
 Tester::~Tester()
 {
+}
+
+Tester::NameIndex &
+Tester::nameIndex()
+{
+    static NameIndex ix;
+    return ix;
 }
 
 Tester::Registry &
@@ -146,40 +154,30 @@ Tester::test(int &notes, int &warnings, int &errors)
     bool good = true;
 
     try {
-        for (Registry::const_iterator i = registry().begin();
-             i != registry().end(); ++i) {
-            
-            std::cout << " -- Performing test: " << i->first << std::endl;
 
-            Test *test = i->second->makeTest();
-            Test::Results results = test->test(m_key, m_options);
-            delete test;
+        if (m_options & Test::SingleTest) {
 
-            set<string> printed;
-            
-            for (int j = 0; j < (int)results.size(); ++j) {
-                string message = results[j].message();
-                if (printed.find(message) != printed.end()) continue;
-                printed.insert(message);
-                switch (results[j].code()) {
-                case Test::Result::Success:
-                    break;
-                case Test::Result::Note:
-                    std::cout << " ** NOTE: " << results[j].message() << std::endl;
-                    ++notes;
-                    break;
-                case Test::Result::Warning:
-                    std::cout << " ** WARNING: " << results[j].message() << std::endl;
-                    ++warnings;
-                    break;
-                case Test::Result::Error:
-                    std::cout << " ** ERROR: " << results[j].message() << std::endl;
-                    ++errors;
-                    good = false;
-                    break;
-                }
+            if (registry().find(m_singleTest) != registry().end()) {
+
+                good = performTest(m_singleTest, notes, warnings, errors);
+
+            } else {
+
+                std::cout << " ** ERROR: Unknown single-test id \""
+                          << m_singleTest << "\"" << std::endl;
+                good = false;
+            }
+
+        } else {
+        
+            for (Registry::const_iterator i = registry().begin();
+                 i != registry().end(); ++i) {
+
+                bool thisGood = performTest(i->first, notes, warnings, errors);
+                if (!thisGood) good = false;
             }
         }
+
     } catch (Test::FailedToLoadPlugin) {
         std::cout << " ** ERROR: Failed to load plugin (key = \"" << m_key
                   << "\")" << std::endl;
@@ -189,6 +187,49 @@ Tester::test(int &notes, int &warnings, int &errors)
             std::cout << "            " << pp[i] << std::endl;
         }
         good = false;
+    }
+
+    return good;
+}
+
+bool
+Tester::performTest(std::string id, int &notes, int &warnings, int &errors)
+{
+    std::cout << " -- Performing test: "
+              << id
+              << " "
+              << nameIndex()[id]
+              << std::endl;
+    
+    Test *test = registry()[id]->makeTest();
+    Test::Results results = test->test(m_key, m_options);
+    delete test;
+
+    set<string> printed;
+
+    bool good = true;
+
+    for (int j = 0; j < (int)results.size(); ++j) {
+        string message = results[j].message();
+        if (printed.find(message) != printed.end()) continue;
+        printed.insert(message);
+        switch (results[j].code()) {
+        case Test::Result::Success:
+            break;
+        case Test::Result::Note:
+            std::cout << " ** NOTE: " << results[j].message() << std::endl;
+            ++notes;
+            break;
+        case Test::Result::Warning:
+            std::cout << " ** WARNING: " << results[j].message() << std::endl;
+            ++warnings;
+            break;
+        case Test::Result::Error:
+            std::cout << " ** ERROR: " << results[j].message() << std::endl;
+            ++errors;
+            good = false;
+            break;
+        }
     }
 
     return good;

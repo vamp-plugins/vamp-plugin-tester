@@ -118,9 +118,12 @@ int main(int argc, char **argv)
 
     cerr << name << ": Running..." << endl;
 
+    std::string single = "";
+
     Test::Options opts = Test::NoOption;
     if (nondeterministic) opts |= Test::NonDeterministic;
     if (verbose) opts |= Test::Verbose;
+    if (single != "") opts |= Test::SingleTest;
 
     if (all) {
         bool good = true;
@@ -134,7 +137,7 @@ int main(int argc, char **argv)
         int notes = 0, warnings = 0, errors = 0;
         for (int i = 0; i < (int)keys.size(); ++i) {
             cout << "Testing plugin: " << keys[i] << endl;
-            Tester tester(keys[i], opts);
+            Tester tester(keys[i], opts, single);
             if (tester.test(notes, warnings, errors)) {
                 cout << name << ": All tests succeeded for this plugin" << endl;
             } else {
@@ -161,7 +164,7 @@ int main(int argc, char **argv)
         }   
     } else {
         string key = argument;
-        Tester tester(key, opts);
+        Tester tester(key, opts, single);
         int notes = 0, warnings = 0, errors = 0;
         if (tester.test(notes, warnings, errors)) {
             cout << name << ": All tests succeeded";

@@ -53,13 +53,13 @@ using namespace std;
 #endif
 
 Tester::TestRegistrar<TestDefaultProgram>
-TestDefaultProgram::m_registrar("E1 Inconsistent default program");
+TestDefaultProgram::m_registrar("E1", "Inconsistent default program");
 
 Tester::TestRegistrar<TestDefaultParameters>
-TestDefaultParameters::m_registrar("E2 Inconsistent default parameters");
+TestDefaultParameters::m_registrar("E2", "Inconsistent default parameters");
 
 Tester::TestRegistrar<TestParametersOnReset>
-TestParametersOnReset::m_registrar("E3 Parameter retention through reset");
+TestParametersOnReset::m_registrar("E3", "Parameter retention through reset");
 
 static const size_t _step = 1000;
 

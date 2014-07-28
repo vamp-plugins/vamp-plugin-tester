@@ -47,14 +47,16 @@
 class Tester
 {
 public:
-    Tester(std::string pluginKey, Test::Options);
+    Tester(std::string pluginKey, Test::Options, std::string singleTestId = "");
     ~Tester();
 
     bool test(int &notes, int &warnings, int &errors);
 
     class Registrar {
     public:
-        Registrar(std::string name) { Tester::registerTest(name, this); }
+        Registrar(std::string id, std::string name) { 
+            Tester::registerTest(id, name, this);
+        }
         virtual ~Registrar() { }
         virtual Test *makeTest() = 0;
     };
@@ -62,19 +64,26 @@ public:
     template <typename T>
     class TestRegistrar : Registrar {
     public:
-        TestRegistrar(std::string name) : Registrar(name) { }
+        TestRegistrar(std::string id, std::string name) : 
+            Registrar(id, name) { }
         virtual Test *makeTest() { return new T(); }
     };
 
-    static void registerTest(std::string name, Registrar *r) {
-        registry()[name] = r;
+    static void registerTest(std::string id, std::string name, Registrar *r) {
+        nameIndex()[id] = name;
+        registry()[id] = r;
     }
     
 protected:
     std::string m_key;
     Test::Options m_options;
+    std::string m_singleTest;
+    typedef std::map<std::string, std::string> NameIndex;
     typedef std::map<std::string, Registrar *> Registry;
+    static NameIndex &nameIndex();
     static Registry &registry();
+
+    bool performTest(std::string id, int &notes, int &warnings, int &errors);
 };
 
 #endif
