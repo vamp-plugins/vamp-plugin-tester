@@ -84,6 +84,20 @@ Tester::registry()
     return r;
 }
 
+void
+Tester::listTests()
+{
+    cout << endl;
+    cout << "Total tests: " << nameIndex().size() << "\n" << endl;
+    cout << "ID | Name" << endl;
+    cout << "---+-----" << endl;
+    for (NameIndex::const_iterator i = nameIndex().begin();
+         i != nameIndex().end(); ++i) {
+        cout << i->first << " | " << i->second << endl;
+    }
+    cout << endl;
+}
+
 bool
 Tester::test(int &notes, int &warnings, int &errors)
 {

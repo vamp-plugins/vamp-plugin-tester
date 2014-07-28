@@ -50,6 +50,8 @@
 
 using namespace std;
 
+static const std::string VERSION="1.1";
+
 void usage(const char *name)
 {
     cerr << "\n"
@@ -58,8 +60,9 @@ void usage(const char *name)
         "Copyright 2009-2012 QMUL.\n"
         "Freely redistributable; published under a BSD-style license.\n\n"
         "Usage:\n"
-        "  " << name << " [-nv] <pluginbasename>:<plugin>\n"
-        "  " << name << " [-nv] -a\n\n"
+        "  " << name << " [-nv] [-t <test>] <pluginbasename>:<plugin>\n"
+        "  " << name << " [-nv] [-t <test>] -a\n"
+        "  " << name << " -l\n\n"
         "Example:\n"
         "  " << name << " vamp-example-plugins:amplitudefollower\n\n"
         "Options:\n"
@@ -67,7 +70,11 @@ void usage(const char *name)
         "  -n, --nondeterministic    Plugins may be nondeterministic: print a note\n"
         "                            instead of an error if results differ between runs\n\n"
         "  -v, --verbose             Show returned features each time a note, warning,\n"
-        "                            or error arises from feature data\n"
+        "                            or error arises from feature data\n\n"
+        "  -t, --test <test>         Run only a single test, not the full test suite.\n"
+        "                            Identify the test by its id, e.g. A3\n\n"
+        "  -l, --list-tests          List tests by id and name\n\n"
+        "  --version                 Display the version of " << name << "\n"
         "\nIf you have access to a runtime memory checker, you may find it especially\n"
         "helpful to run this tester under it and watch for errors thus provoked.\n"
          << endl;
@@ -87,10 +94,20 @@ int main(int argc, char **argv)
     bool nondeterministic = false;
     bool verbose = false;
     bool all = false;
-    string argument;
+    bool list = false;
+    string plugin;
+    string single;
+
+    // Would be better to use getopt, but let's avoid the dependency for now
     for (int i = 1; i < argc; ++i) {
         if (!argv[i]) break;
         if (argv[i][0] == '-') {
+            if (!strcmp(argv[i], "-vn") ||
+                !strcmp(argv[i], "-nv")) {
+                verbose = true;
+                nondeterministic = true;
+                continue;
+            }
             if (!strcmp(argv[i], "-v") ||
                 !strcmp(argv[i], "--verbose")) {
                 verbose = true;
@@ -106,19 +123,44 @@ int main(int argc, char **argv)
                 all = true;
                 continue;
             }
+            if (!strcmp(argv[i], "-l") ||
+                !strcmp(argv[i], "--list-tests")) {
+                list = true;
+                continue;
+            }
+            if (!strcmp(argv[i], "-t") ||
+                !strcmp(argv[i], "--test")) {
+                if (i + 1 < argc) {
+                    single = argv[i+1];
+                    ++i;
+                } else {
+                    usage(name);
+                }
+                continue;
+            }
+            if (!strcmp(argv[i], "--version")) {
+                cout << "v" << VERSION << endl;
+                return 0;
+            }
             usage(name);
         } else {
-            if (argument != "") usage(name);
-            else argument = argv[i];
+            if (plugin != "") usage(name);
+            else plugin = argv[i];
         }
     }
+
+    if (list) {
+        if (all || nondeterministic || (single != "") || (plugin != "")) {
+            usage(name);
+        }
+        Tester::listTests();
+        return 0;
+    }
     
-    if (argument == "" && !all) usage(name);
-    if (argument != "" &&  all) usage(name);
+    if (plugin == "" && !all) usage(name);
+    if (plugin != "" &&  all) usage(name);
 
     cerr << name << ": Running..." << endl;
-
-    std::string single = "";
 
     Test::Options opts = Test::NoOption;
     if (nondeterministic) opts |= Test::NonDeterministic;
@@ -163,8 +205,7 @@ int main(int argc, char **argv)
             return 1;
         }   
     } else {
-        string key = argument;
-        Tester tester(key, opts, single);
+        Tester tester(plugin, opts, single);
         int notes = 0, warnings = 0, errors = 0;
         if (tester.test(notes, warnings, errors)) {
             cout << name << ": All tests succeeded";

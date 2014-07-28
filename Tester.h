@@ -52,6 +52,8 @@ public:
 
     bool test(int &notes, int &warnings, int &errors);
 
+    static void listTests();
+
     class Registrar {
     public:
         Registrar(std::string id, std::string name) { 
