@@ -4,7 +4,7 @@
     Vamp Plugin Tester
     Chris Cannam, cannam@all-day-breakfast.com
     Centre for Digital Music, Queen Mary, University of London.
-    Copyright 2009-2012 QMUL.
+    Copyright 2009-2014 QMUL.
 
     This program loads a Vamp plugin and tests its susceptibility to a
     number of common pitfalls, including handling of extremes of input
@@ -57,7 +57,7 @@ void usage(const char *name)
     cerr << "\n"
          << name << ": A Vamp plugin host that tests plugins for common errors.\n"
         "Chris Cannam, Centre for Digital Music, Queen Mary, University of London.\n"
-        "Copyright 2009-2012 QMUL.\n"
+        "Copyright 2009-2014 QMUL.\n"
         "Freely redistributable; published under a BSD-style license.\n\n"
         "Usage:\n"
         "  " << name << " [-nv] [-t <test>] <pluginbasename>:<plugin>\n"

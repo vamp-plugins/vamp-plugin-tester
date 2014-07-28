@@ -4,7 +4,7 @@
     Vamp Plugin Fuzz Tester
     Chris Cannam, cannam@all-day-breakfast.com
     Centre for Digital Music, Queen Mary, University of London.
-    Copyright 2009 QMUL.
+    Copyright 2009-2014 QMUL.
 
     This program loads a Vamp plugin and tests its susceptibility to a
     number of common pitfalls, including handling of extremes of input
