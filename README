@@ -30,6 +30,11 @@ that your plugins are expected to return different results each time
 they are run.  The default behaviour is to treat different results on
 separate runs with the same input data as an error.
 
+Supply the -t or --test option with a test ID argument to tell
+vamp-plugin-tester to run only a single test, rather than the complete
+test suite. To find out what test ID to use for a given test, run
+vamp-plugin-tester with the --list-tests or -l option.
+
 
 Errors and Warnings
 ===================
