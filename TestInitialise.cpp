@@ -60,13 +60,11 @@ TestSampleRates::m_registrar("F1", "Different sample rates");
 Tester::TestRegistrar<TestLengthyConstructor>
 TestLengthyConstructor::m_registrar("F2", "Lengthy constructor");
 
-static const size_t _step = 1000;
-
 Test::Results
 TestSampleRates::test(string key, Options options)
 {
     int rates[] =
-        { 11, 800, 10099, 11024, 44100, 48000, 96000, 192000, 201011, 1094091 };
+        { 111, 800, 10099, 11024, 44100, 48000, 96000, 192000, 201011, 1094091 };
 
     Results r;
 
@@ -86,10 +84,15 @@ TestSampleRates::test(string key, Options options)
         Plugin::FeatureSet f;
         float **data = 0;
         size_t channels = 0;
-        size_t count = 100;
+
+        // Aim to feed the plugin a roughly fixed input duration in secs
+        const float seconds = 10.f;
+        size_t step = 1000;
+        size_t count = (seconds * rate) / step;
+        if (count < 1) count = 1;
 
         Results subr;
-        if (!initAdapted(p.get(), channels, _step, _step, subr)) {
+        if (!initAdapted(p.get(), channels, step, step, subr)) {
             // This is not an error; the plugin can legitimately
             // refuse to initialise at weird settings and that's often
             // the most acceptable result
@@ -99,14 +102,14 @@ TestSampleRates::test(string key, Options options)
             continue;
         }
 
-        data = createTestAudio(channels, _step, count);
-        for (size_t i = 0; i < count; ++i) {
+        data = createTestAudio(channels, step, count);
+        for (size_t j = 0; j < count; ++j) {
 #ifdef __GNUC__
             float *ptr[channels];
 #else
             float **ptr = (float **)alloca(channels * sizeof(float));
 #endif
-            size_t idx = i * _step;
+            size_t idx = j * step;
             for (size_t c = 0; c < channels; ++c) ptr[c] = data[c] + idx;
             RealTime timestamp = RealTime::frame2RealTime(idx, rate);
             Plugin::FeatureSet fs = p->process(ptr, timestamp);
