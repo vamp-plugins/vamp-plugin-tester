@@ -6,19 +6,19 @@ LD		= $(TOOLPREFIX)g++
 AR		= $(TOOLPREFIX)ar
 RANLIB		= $(TOOLPREFIX)ranlib
 
-LDFLAGS 	+= -L../vamp-plugin-sdk -lvamp-hostsdk -ldl
+LDFLAGS 	+= -L../vamp-plugin-sdk -lvamp-hostsdk
 CXXFLAGS	+= -I../vamp-plugin-sdk -g -Wall -Wextra 
 
 OBJECTS		:= vamp-plugin-tester.o Tester.o Test.o TestStaticData.o TestInputExtremes.o TestMultipleRuns.o TestOutputs.o TestDefaults.o TestInitialise.o
 
-vamp-plugin-tester:	$(OBJECTS)
+vamp-plugin-tester.exe:	$(OBJECTS)
 	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS)
 
 clean:
 	rm -f $(OBJECTS)
 
 distclean:	clean
-	rm -f *~ vamp-plugin-tester
+	rm -f *~ vamp-plugin-tester.exe
 
 depend:
 	makedepend -Y *.cpp *.h

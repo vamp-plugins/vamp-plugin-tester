@@ -49,6 +49,7 @@ using namespace Vamp::HostExt;
 using namespace std;
 
 #include <cmath>
+#include <ctime>
 
 #ifndef __GNUC__
 #include <alloca.h>
