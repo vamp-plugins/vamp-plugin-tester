@@ -1,6 +1,8 @@
 
-LDFLAGS 	+= -lvamp-hostsdk -ldl
-CXXFLAGS	+= -g -Wall -Wextra
+ARCHFLAGS	?=
+
+LDFLAGS 	+= $(ARCHFLAGS) -lvamp-hostsdk -ldl
+CXXFLAGS	+= $(ARCHFLAGS) -g -Wall -Wextra
 
 OBJECTS		:= vamp-plugin-tester.o Tester.o Test.o TestStaticData.o TestInputExtremes.o TestMultipleRuns.o TestOutputs.o TestDefaults.o TestInitialise.o
 
