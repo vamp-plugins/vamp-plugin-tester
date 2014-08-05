@@ -1,5 +1,5 @@
 
-LDFLAGS 	+= -lvamp-hostsdk -ldl
+LDFLAGS 	+= -Wl,-Bstatic -lvamp-hostsdk -Wl,-Bdynamic -ldl
 CXXFLAGS	+= -g -Wall -Wextra
 
 OBJECTS		:= vamp-plugin-tester.o Tester.o Test.o TestStaticData.o TestInputExtremes.o TestMultipleRuns.o TestOutputs.o TestDefaults.o TestInitialise.o
