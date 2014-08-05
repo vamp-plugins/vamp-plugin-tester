@@ -1,0 +1,7 @@
+syntax: glob
+*.o
+*~
+*.so
+*.dll
+*.exe
+vamp-plugin-tester
