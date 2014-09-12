@@ -110,10 +110,14 @@ protected:
 
     bool allFeaturesValid(const Vamp::Plugin::FeatureSet &); // i.e. no NaN/inf
 
-    void dump(const Vamp::Plugin::FeatureSet &);
-    void dump(const Result &r,
-              const Vamp::Plugin::FeatureSet &,
-              const Vamp::Plugin::FeatureSet &);
+    void dumpFeature(const Vamp::Plugin::Feature &, bool showValues);
+    void dump(const Vamp::Plugin::FeatureSet &, bool showValues = true);
+    void dumpTwo(const Result &r,
+                 const Vamp::Plugin::FeatureSet &,
+                 const Vamp::Plugin::FeatureSet &);
+    void dumpDiff(const Result &r,
+                  const Vamp::Plugin::FeatureSet &,
+                  const Vamp::Plugin::FeatureSet &);
 };
 
 extern bool operator==(const Vamp::Plugin::FeatureSet &a,

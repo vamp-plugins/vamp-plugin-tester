@@ -103,7 +103,7 @@ TestDefaultProgram::test(string key, Options options)
         Result res;
         if (options & NonDeterministic) res = note(message);
         else res = error(message);
-        if (options & Verbose) dump(res, f[0], f[1]);
+        if (options & Verbose) dumpDiff(res, f[0], f[1]);
         r.push_back(res);
     } else {
         r.push_back(success());
@@ -163,7 +163,7 @@ TestDefaultParameters::test(string key, Options options)
         Result res;
         if (options & NonDeterministic) res = note(message);
         else res = error(message);
-        if (options & Verbose) dump(res, f[0], f[1]);
+        if (options & Verbose) dumpDiff(res, f[0], f[1]);
         r.push_back(res);
     } else {
         r.push_back(success());
@@ -224,7 +224,30 @@ TestParametersOnReset::test(string key, Options options)
             p->setParameter(pl[i].identifier, value);
         }
 
-        if (!initAdapted(p.get(), channels, _step, _step, r)) return r;
+        if (!initAdapted(p.get(), channels, _step, _step, r)) {
+
+            // OK, plugin didn't like that. Let's try a different tack
+            // -- set everything to min except those parameters whose
+            // default is min, and set those to half way instead
+            
+            for (int i = 0; i < (int)pl.size(); ++i) {
+                float value = pl[i].minValue;
+                if (value == pl[i].defaultValue) {
+                    value = (pl[i].maxValue + pl[i].minValue) / 2;
+                    value = ceil(value / pl[i].quantizeStep) * pl[i].quantizeStep;
+                    if (value > pl[i].maxValue) {
+                        value = pl[i].maxValue;
+                    }
+                }
+                p->setParameter(pl[i].identifier, value);
+            }
+
+            r = Results();
+            if (!initAdapted(p.get(), channels, _step, _step, r)) {
+                // Still didn't work, give up
+                return r;
+            }
+        }
 
         //  First run: construct, set params, init, process
         // Second run: construct, set params, init, reset, process
@@ -254,7 +277,7 @@ TestParametersOnReset::test(string key, Options options)
         Result res;
         if (options & NonDeterministic) res = note(message);
         else res = error(message);
-        if (options & Verbose) dump(res, f[0], f[1]);
+        if (options & Verbose) dumpDiff(res, f[0], f[1]);
         r.push_back(res);
     } else {
         r.push_back(success());

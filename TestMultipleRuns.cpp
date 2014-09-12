@@ -101,7 +101,7 @@ TestDistinctRuns::test(string key, Options options)
         string message = "Consecutive runs with separate instances produce different results";
         if (options & NonDeterministic) res = note(message);
         else res = error(message);
-        if (options & Verbose) dump(res, f[0], f[1]);
+        if (options & Verbose) dumpDiff(res, f[0], f[1]);
         r.push_back(res);
     } else {
         r.push_back(success());
@@ -148,7 +148,7 @@ TestReset::test(string key, Options options)
         Result res;
         if (options & NonDeterministic) res = note(message);
         else res = error(message);
-        if (options & Verbose) dump(res, f[0], f[1]);
+        if (options & Verbose) dumpDiff(res, f[0], f[1]);
         r.push_back(res);
     } else {
         r.push_back(success());
@@ -204,7 +204,7 @@ TestInterleavedRuns::test(string key, Options options)
         Result res;
         if (options & NonDeterministic) res = note(message);
         else res = error(message);
-        if (options & Verbose) dump(res, f[0], f[1]);
+        if (options & Verbose) dumpDiff(res, f[0], f[1]);
         r.push_back(res);
     } else {
         r.push_back(success());
@@ -250,7 +250,10 @@ TestDifferentStartTimes::test(string key, Options options)
         Result res;
         if (options & NonDeterministic) res = note(message);
         else res = warning(message);
-        if (options & Verbose) dump(res, f[0], f[1]);
+        if (options & Verbose) {
+            cout << message << endl;
+            dump(f[0], false);
+        }
         r.push_back(res);
     } else {
         r.push_back(success());

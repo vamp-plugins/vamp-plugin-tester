@@ -54,8 +54,13 @@ using namespace Vamp::HostExt;
 Test::Test() { }
 Test::~Test() { }
 
+using std::cerr;
+using std::cout;
+using std::endl;
+using std::string;
+
 Plugin *
-Test::load(std::string key, float rate)
+Test::load(string key, float rate)
 {
     Plugin *p = PluginLoader::getInstance()->loadPlugin
         (key, rate, PluginLoader::ADAPT_ALL);
@@ -171,39 +176,124 @@ Test::allFeaturesValid(const Plugin::FeatureSet &b)
 }
 
 void
-Test::dump(const Plugin::FeatureSet &fs)
+Test::dumpFeature(const Plugin::Feature &f, bool showValues)
+{
+    cout << "    Timestamp: " << (!f.hasTimestamp ? "(none)" : f.timestamp.toText()) << endl;
+    cout << "    Duration: " << (!f.hasDuration ? "(none)" : f.duration.toText()) << endl;
+    cout << "    Label: " << (f.label == "" ? "(none)" : f.label) << endl;
+    if (showValues) {
+        cout << "    Values (" << f.values.size() << "): " << (f.values.empty() ? "(none)" : "");
+        for (int j = 0; j < (int)f.values.size(); ++j) {
+            cout << f.values[j] << " ";
+        }
+        cout << endl;
+    } else {
+        cout << "    Values (" << f.values.size() << "): (elided)" << endl;
+    }
+}    
+
+void
+Test::dump(const Plugin::FeatureSet &fs, bool showValues)
 {
     for (Plugin::FeatureSet::const_iterator fsi = fs.begin();
          fsi != fs.end(); ++fsi) {
         int output = fsi->first;
-        std::cout << "Output " << output << ":" << std::endl;
+        cout << "Output " << output << ":" << endl;
         const Plugin::FeatureList &fl = fsi->second;
         for (int i = 0; i < (int)fl.size(); ++i) {
-            std::cout << "  Feature " << i << ":" << std::endl;
+            cout << "  Feature " << i << ":" << endl;
             const Plugin::Feature &f = fl[i];
-            std::cout << "    Timestamp: " << (f.hasTimestamp ? "(none)" : f.timestamp.toText()) << std::endl;
-            std::cout << "    Duration: " << (f.hasDuration ? "(none)" : f.duration.toText()) << std::endl;
-            std::cout << "    Label: " << (f.label == "" ? "(none)" : f.label) << std::endl;
-            std::cout << "    Value: " << (f.values.empty() ? "(none)" : "");
-            for (int j = 0; j < (int)f.values.size(); ++j) {
-                std::cout << f.values[j] << " ";
-            }
-            std::cout << std::endl;
+            dumpFeature(f, showValues);
         }
     }
 }
 
 void
-Test::dump(const Result &r,
-           const Plugin::FeatureSet &a,
-           const Plugin::FeatureSet &b)
+Test::dumpTwo(const Result &r,
+              const Plugin::FeatureSet &a,
+              const Plugin::FeatureSet &b)
 {
     std::cout << r.message() << std::endl;
     std::cout << "\nFirst result set:" << std::endl;
-    dump(a);
+    dump(a, false);
     std::cout << "\nSecond result set:" << std::endl;
-    dump(b);
+    dump(b, false);
     std::cout << std::endl;
+}
+
+void
+Test::dumpDiff(const Result &r,
+               const Plugin::FeatureSet &a,
+               const Plugin::FeatureSet &b)
+{
+    cout << r.message() << endl;
+    cout << "\nDifferences follow:" << endl;
+    if (a.size() != b.size()) {
+        cout << "*** First result set has features on " << a.size() 
+                  << " output(s), second has features on " << b.size()
+                  << endl;
+        return;
+    }
+    Plugin::FeatureSet::const_iterator ai = a.begin();
+    Plugin::FeatureSet::const_iterator bi = b.begin();
+    while (ai != a.end()) {
+        if (ai->first != bi->first) {
+            cout << "\n*** Output number mismatch: first result set says "
+                      << ai->first << " where second says " << bi->first
+                      << endl;
+        } else {
+            cout << "\nOutput " << ai->first << ":" << endl;
+            if (ai->second.size() != bi->second.size()) {
+                cout << "*** First result set has " << ai->second.size()
+                          << " feature(s) on this output, second has "
+                          << bi->second.size() << endl;
+            } else {
+                int fno = 0;
+                int diffcount = 0;
+                Plugin::FeatureList::const_iterator afi = ai->second.begin();
+                Plugin::FeatureList::const_iterator bfi = bi->second.begin();
+                while (afi != ai->second.end()) {
+                    if (!(*afi == *bfi)) {
+                        if (diffcount == 0) {
+                            bool differInValues = (afi->values != bfi->values);
+                            if (afi->hasTimestamp != bfi->hasTimestamp) {
+                                cout << "*** Feature " << fno << " differs in presence of timestamp (" << afi->hasTimestamp << " vs " << bfi->hasTimestamp << ")" << endl;
+                            }
+                            if (afi->hasTimestamp && (afi->timestamp != bfi->timestamp)) {
+                                cout << "*** Feature " << fno << " differs in timestamp (" << afi->timestamp << " vs " << bfi->timestamp << " )" << endl;
+                            }
+                            if (afi->hasDuration != bfi->hasDuration) {
+                                cout << "*** Feature " << fno << " differs in presence of duration (" << afi->hasDuration << " vs " << bfi->hasDuration << ")" << endl;
+                            }
+                            if (afi->hasDuration && (afi->duration != bfi->duration)) {
+                                cout << "*** Feature " << fno << " differs in duration (" << afi->duration << " vs " << bfi->duration << " )" << endl;
+                            }
+                            if (afi->label != bfi->label) {
+                                cout << "*** Feature " << fno << " differs in label" << endl;
+                            }
+                            if (differInValues) {
+                                cout << "*** Feature " << fno << " differs in values" << endl;
+                            }
+                            cout << "  First output:" << endl;
+                            dumpFeature(*afi, differInValues);
+                            cout << "  Second output:" << endl;
+                            dumpFeature(*bfi, differInValues);
+                        }
+                        ++diffcount;
+                    }
+                    ++fno;
+                    ++afi;
+                    ++bfi;
+                }
+                if (diffcount > 1) {
+                    cout << diffcount-1 << " subsequent differing feature(s) elided" << endl;
+                }
+            }
+        }                
+        ++ai;
+        ++bi;
+    }
+    cout << endl;
 }
 
 bool
