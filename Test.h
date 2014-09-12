@@ -110,6 +110,8 @@ protected:
 
     bool allFeaturesValid(const Vamp::Plugin::FeatureSet &); // i.e. no NaN/inf
 
+    bool containsTimestamps(const Vamp::Plugin::FeatureSet &);
+
     void dumpFeature(const Vamp::Plugin::Feature &, bool showValues);
     void dump(const Vamp::Plugin::FeatureSet &, bool showValues = true);
     void dumpTwo(const Result &r,

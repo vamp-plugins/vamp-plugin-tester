@@ -175,6 +175,22 @@ Test::allFeaturesValid(const Plugin::FeatureSet &b)
     return true;
 }
 
+bool
+Test::containsTimestamps(const Plugin::FeatureSet &b)
+{
+    for (Plugin::FeatureSet::const_iterator i = b.begin(); i != b.end(); ++i) {
+        for (int j = 0; j < (int)i->second.size(); ++j) {
+            if (i->second[j].values.empty()) continue;
+            for (int k = 0; k < (int)i->second[j].values.size(); ++k) {
+                if (i->second[j].hasTimestamp) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 void
 Test::dumpFeature(const Plugin::Feature &f, bool showValues)
 {

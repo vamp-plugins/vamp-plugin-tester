@@ -246,13 +246,20 @@ TestDifferentStartTimes::test(string key, Options options)
     if (data) destroyTestAudio(data, channels);
 
     if (f[0] == f[1]) {
-        string message = "Consecutive runs with different starting timestamps produce the same result";
         Result res;
-        if (options & NonDeterministic) res = note(message);
-        else res = warning(message);
-        if (options & Verbose) {
-            cout << message << endl;
-            dump(f[0], false);
+        if (containsTimestamps(f[0])) {
+            string message = "Consecutive runs with different starting timestamps produce the same result";
+            if (options & NonDeterministic) {
+                res = note(message);
+            } else {
+                res = warning(message);
+            }
+            if (options & Verbose) {
+                cout << res.message() << endl;
+                dump(f[0], false);
+            }
+        } else {
+            res = note("Consecutive runs with different starting timestamps produce the same result (but result features contain no timestamps, so this is probably all right)");
         }
         r.push_back(res);
     } else {
