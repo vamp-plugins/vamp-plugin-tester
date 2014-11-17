@@ -147,6 +147,11 @@ TestEmptyFields::testRecommended(string text, string desc)
 {
     if (text == "") {
         return warning(desc + " is empty");
+    } else if (text == "Licence information not available." ||
+               text == "VamPy Plugin." ||
+               text == "Not given. (Hint: Implement getDescription method.)" ||
+               text == "VamPy Plugin (Noname)") {
+        return warning(desc + " is missing (returns VamPy boilerplate text)");
     }
     return success();
 }
