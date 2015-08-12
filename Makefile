@@ -19,6 +19,7 @@ VAMP_OBJECTS	:= \
 	$(VAMP_SRCDIR)/PluginLoader.o \
 	$(VAMP_SRCDIR)/PluginSummarisingAdapter.o \
 	$(VAMP_SRCDIR)/PluginWrapper.o \
+	$(VAMP_SRCDIR)/Files.o \
 	$(VAMP_SRCDIR)/acsymbols.o
 
 OBJECTS		:= \
