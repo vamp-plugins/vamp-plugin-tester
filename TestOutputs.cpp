@@ -120,14 +120,24 @@ TestTimestamps::test(string key, Options options)
     auto_ptr<Plugin> p(PluginLoader::getInstance()->loadPlugin
                        (key, rate, PluginLoader::ADAPT_ALL_SAFE));
 
-    Plugin::FeatureSet f;
     Results r;
+    Plugin::FeatureSet f;
     float **data = 0;
     size_t channels = 0;
     size_t step = 0, block = 0;
     size_t count = 100;
 
     if (!initDefaults(p.get(), channels, step, block, r)) return r;
+
+    Plugin::OutputList outputs = p->getOutputDescriptors();
+    for (int i = 0; i < (int)outputs.size(); ++i) {
+        if (outputs[i].sampleType == Plugin::OutputDescriptor::FixedSampleRate &&
+            outputs[i].sampleRate == 0.f) {
+            r.push_back(error("Plugin output \"" + outputs[i].identifier +
+                              "\" has FixedSampleRate but gives sample rate as 0"));
+        }
+    }
+
     if (!data) data = createTestAudio(channels, block, count);
     for (size_t i = 0; i < count; ++i) {
 #ifdef __GNUC__
@@ -145,7 +155,6 @@ TestTimestamps::test(string key, Options options)
     appendFeatures(f, fs);
     if (data) destroyTestAudio(data, channels);
 
-    Plugin::OutputList outputs = p->getOutputDescriptors();
     for (Plugin::FeatureSet::const_iterator i = f.begin();
          i != f.end(); ++i) {
         const Plugin::OutputDescriptor &o = outputs[i->first];
