@@ -171,16 +171,24 @@ Error and Warning Reference
  simple test file.  This may be perfectly reasonable behaviour, but
  you might like to know about it.
 
+ ** ERROR: Plugin output <x> has FixedSampleRate but gives sample rate as 0
+
+ A plugin output that has a sample type of FixedSampleRate must have a
+ non-zero sample rate. See
+ https://code.soundsoftware.ac.uk/projects/vamp-plugin-sdk/wiki/SampleType
+
  ** NOTE: Plugin returns features with timestamps on OneSamplePerStep output
  ** NOTE: Plugin returns features with durations on OneSamplePerStep output
 
  Hosts will usually ignore timestamps and durations attached to any
- feature returned on a OneSamplePerStep output.
+ feature returned on a OneSamplePerStep output. See
+ https://code.soundsoftware.ac.uk/projects/vamp-plugin-sdk/wiki/SampleType
 
  ** ERROR: Plugin returns features with no timestamps on VariableSampleRate output
 
  Timestamps are mandatory on all features associated with a
- VariableSampleRate output.
+ VariableSampleRate output. See
+ https://code.soundsoftware.ac.uk/projects/vamp-plugin-sdk/wiki/SampleType
 
  ** WARNING: Plugin returned one or more NaN/inf values
 
@@ -251,6 +259,20 @@ Error and Warning Reference
  results for the two runs, suggesting that some internal data was
  changed when a parameter was set to its default, in a way that
  differed from the plugin's initially constructed state.
+
+ If you give the -n or --nondeterministic option, vamp-plugin-tester
+ will downgrade this error to a note.
+
+ ** ERROR: Call to reset after setting parameters, but before processing, changes the results (parameter values not retained through reset?)
+
+ The plugin was constructed and run twice on the same data. The first
+ time, its parameters were set to some arbitrary values and it was
+ initialised and run. The second time, its parameters were set to the
+ same values and it was initialised, then reset(), then run. The two
+ runs returned different results, suggesting that perhaps some
+ parameter value was being modified within the reset() function. (This
+ function should reset internal state within the plugin, but not
+ parameter configuration.)
 
  If you give the -n or --nondeterministic option, vamp-plugin-tester
  will downgrade this error to a note.
