@@ -112,7 +112,8 @@ protected:
 
     bool containsTimestamps(const Vamp::Plugin::FeatureSet &);
 
-    void dumpFeature(const Vamp::Plugin::Feature &, bool showValues);
+    void dumpFeature(const Vamp::Plugin::Feature &, bool showValues,
+                     const Vamp::Plugin::Feature *other = 0);
     void dump(const Vamp::Plugin::FeatureSet &, bool showValues = true);
     void dumpTwo(const Result &r,
                  const Vamp::Plugin::FeatureSet &,

@@ -192,15 +192,42 @@ Test::containsTimestamps(const Plugin::FeatureSet &b)
 }
 
 void
-Test::dumpFeature(const Plugin::Feature &f, bool showValues)
+Test::dumpFeature(const Plugin::Feature &f, bool showValues,
+                  const Plugin::Feature *other)
 {
     cout << "    Timestamp: " << (!f.hasTimestamp ? "(none)" : f.timestamp.toText()) << endl;
     cout << "    Duration: " << (!f.hasDuration ? "(none)" : f.duration.toText()) << endl;
     cout << "    Label: " << (f.label == "" ? "(none)" : f.label) << endl;
     if (showValues) {
         cout << "    Values (" << f.values.size() << "): " << (f.values.empty() ? "(none)" : "");
-        for (int j = 0; j < (int)f.values.size(); ++j) {
-            cout << f.values[j] << " ";
+        int n = f.values.size();
+        if (!other) {
+            for (int j = 0; j < n; ++j) {
+                cout << f.values[j] << " ";
+            }
+        } else {
+            int samecount = 0;
+            int diffcount = 0;
+            for (int j = 0; j <= n; ++j) {
+                if (j < n && f.values[j] == other->values[j]) {
+                    ++samecount;
+                } else {
+                    if (samecount > 0) {
+                        cout << "(" << samecount << " identical) ";
+                    }
+                    samecount = 0;
+                    if (j < n) {
+                        ++diffcount;
+                        if (diffcount > 20 && j + 10 < n) {
+                            cout << "(remaining " << n - j << " values elided)";
+                            break;
+                        } else {
+                            cout << f.values[j] << " [diff "
+                                 << f.values[j] - other->values[j] << "] ";
+                        }
+                    }
+                }
+            }
         }
         cout << endl;
     } else {
@@ -271,7 +298,9 @@ Test::dumpDiff(const Result &r,
                 while (afi != ai->second.end()) {
                     if (!(*afi == *bfi)) {
                         if (diffcount == 0) {
-                            bool differInValues = (afi->values != bfi->values);
+                            bool differInValues =
+                                (afi->values.size() == bfi->values.size() &&
+                                 afi->values != bfi->values);
                             if (afi->hasTimestamp != bfi->hasTimestamp) {
                                 cout << "*** Feature " << fno << " differs in presence of timestamp (" << afi->hasTimestamp << " vs " << bfi->hasTimestamp << ")" << endl;
                             }
@@ -287,13 +316,16 @@ Test::dumpDiff(const Result &r,
                             if (afi->label != bfi->label) {
                                 cout << "*** Feature " << fno << " differs in label" << endl;
                             }
+                            if (afi->values.size() != bfi->values.size()) {
+                                cout << "*** Feature " << fno << " differs in number of values (" << afi->values.size() << " vs " << bfi->values.size() << ")" << endl;
+                            }
                             if (differInValues) {
                                 cout << "*** Feature " << fno << " differs in values" << endl;
                             }
                             cout << "  First output:" << endl;
                             dumpFeature(*afi, differInValues);
                             cout << "  Second output:" << endl;
-                            dumpFeature(*bfi, differInValues);
+                            dumpFeature(*bfi, differInValues, &(*afi));
                         }
                         ++diffcount;
                     }
