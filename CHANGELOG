@@ -7,6 +7,8 @@ Features
    single test at a time
  
  * Add test for reset() changing effective parameter values
+
+ * Add test for fixed-sample-rate output defined without sample rate
  
  * Add test for existence of .cat file
 
