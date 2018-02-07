@@ -2,7 +2,7 @@
 ARCHFLAGS	?=
 
 LDFLAGS 	+= $(ARCHFLAGS) -ldl -pthread
-CXXFLAGS	+= $(ARCHFLAGS) -g -Wall -Wextra -Ivamp-plugin-sdk -pthread
+CXXFLAGS	+= $(ARCHFLAGS) -std=c++98 -g -Wall -Wextra -Ivamp-plugin-sdk -pthread
 
 # We include the Vamp Host SDK sources in the build here, so that we
 # can build the entire thing with debug symbols even though the SDK
@@ -34,8 +34,11 @@ OBJECTS		:= \
 	TestDefaults.o \
 	TestInitialise.o
 
-vamp-plugin-tester:	$(OBJECTS) $(VAMP_OBJECTS)
+vamp-plugin-tester:	vamp-plugin-sdk/README $(OBJECTS) $(VAMP_OBJECTS)
 	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS)
+
+vamp-plugin-sdk/README:
+	./vext install
 
 clean:
 	rm -f $(OBJECTS) $(VAMP_OBJECTS)

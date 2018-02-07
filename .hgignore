@@ -12,3 +12,4 @@ build/x64/Debug
 *.VC.db
 *.VC.opendb
 *.filters
+glob:.vext-*.bin
