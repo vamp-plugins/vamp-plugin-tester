@@ -6,8 +6,8 @@ LD		= $(TOOLPREFIX)g++
 AR		= $(TOOLPREFIX)ar
 RANLIB		= $(TOOLPREFIX)ranlib
 
-LDFLAGS 	+= -static -L../vamp-plugin-sdk -lvamp-hostsdk
-CXXFLAGS	+= -I../vamp-plugin-sdk -g -Wall -Wextra 
+LDFLAGS 	+= -static -L../vamp-plugin-sdk -lvamp-hostsdk -std=gnu++98
+CXXFLAGS	+= -I../vamp-plugin-sdk -g -Wall -Wextra -std=gnu++98
 
 OBJECTS		:= vamp-plugin-tester.o Tester.o Test.o TestStaticData.o TestInputExtremes.o TestMultipleRuns.o TestOutputs.o TestDefaults.o TestInitialise.o
 

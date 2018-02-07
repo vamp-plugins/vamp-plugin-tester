@@ -48,10 +48,6 @@ using namespace std;
 #include <cmath>
 #include <time.h>
 
-#ifndef __GNUC__
-#include <alloca.h>
-#endif
-
 Tester::TestRegistrar<TestDefaultProgram>
 TestDefaultProgram::m_registrar("E1", "Inconsistent default program");
 
@@ -82,15 +78,12 @@ TestDefaultProgram::test(string key, Options options)
         if (!initAdapted(p.get(), channels, _step, _step, r)) return r;
         if (!data) data = createTestAudio(channels, _step, count);
         for (size_t i = 0; i < count; ++i) {
-#ifdef __GNUC__
-            float *ptr[channels];
-#else
-            float **ptr = (float **)alloca(channels * sizeof(float));
-#endif
+            float **ptr = new float *[channels];
             size_t idx = i * _step;
             for (size_t c = 0; c < channels; ++c) ptr[c] = data[c] + idx;
             RealTime timestamp = RealTime::frame2RealTime(idx, rate);
             Plugin::FeatureSet fs = p->process(ptr, timestamp);
+            delete[] ptr;
             appendFeatures(f[run], fs);
         }
         Plugin::FeatureSet fs = p->getRemainingFeatures();
@@ -142,15 +135,12 @@ TestDefaultParameters::test(string key, Options options)
         if (!initAdapted(p.get(), channels, _step, _step, r)) return r;
         if (!data) data = createTestAudio(channels, _step, count);
         for (size_t i = 0; i < count; ++i) {
-#ifdef __GNUC__
-            float *ptr[channels];
-#else
-            float **ptr = (float **)alloca(channels * sizeof(float));
-#endif
+            float **ptr = new float *[channels];
             size_t idx = i * _step;
             for (size_t c = 0; c < channels; ++c) ptr[c] = data[c] + idx;
             RealTime timestamp = RealTime::frame2RealTime(idx, rate);
             Plugin::FeatureSet fs = p->process(ptr, timestamp);
+            delete[] ptr;
             appendFeatures(f[run], fs);
         }
         Plugin::FeatureSet fs = p->getRemainingFeatures();
@@ -256,15 +246,12 @@ TestParametersOnReset::test(string key, Options options)
 
         if (!data) data = createTestAudio(channels, _step, count);
         for (size_t i = 0; i < count; ++i) {
-#ifdef __GNUC__
-            float *ptr[channels];
-#else
-            float **ptr = (float **)alloca(channels * sizeof(float));
-#endif
+            float **ptr = new float *[channels];
             size_t idx = i * _step;
             for (size_t c = 0; c < channels; ++c) ptr[c] = data[c] + idx;
             RealTime timestamp = RealTime::frame2RealTime(idx, rate);
             Plugin::FeatureSet fs = p->process(ptr, timestamp);
+            delete[] ptr;
             appendFeatures(f[run], fs);
         }
         Plugin::FeatureSet fs = p->getRemainingFeatures();
