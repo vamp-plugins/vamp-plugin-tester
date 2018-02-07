@@ -34,8 +34,11 @@ OBJECTS		:= \
 	TestDefaults.o \
 	TestInitialise.o
 
-vamp-plugin-tester:	$(OBJECTS) $(VAMP_OBJECTS)
+vamp-plugin-tester:	vamp-plugin-sdk/README $(OBJECTS) $(VAMP_OBJECTS)
 	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS)
+
+vamp-plugin-sdk/README:
+	./vext install
 
 clean:
 	rm -f $(OBJECTS) $(VAMP_OBJECTS)
