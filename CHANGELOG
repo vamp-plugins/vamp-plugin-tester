@@ -5,16 +5,16 @@ Features
 
  * Add mechanism for listing the available tests and running only a
    single test at a time
- 
+
  * Add test for reset() changing effective parameter values
 
  * Add test for fixed-sample-rate output defined without sample rate
- 
+
  * Add test for existence of .cat file
 
  * Add test for boilerplate description text still in place for VamPy
    plugins
- 
+
  * Make output more informative for some tests, and make some tests faster
 
 Bug fixes
