@@ -59,7 +59,7 @@ Tester::TestRegistrar<TestValueRanges>
 TestValueRanges::m_registrar("A3", "Inappropriate value extents");
 
 Tester::TestRegistrar<TestCategory>
-TestCategory::m_registrar("A3", "Missing category");
+TestCategory::m_registrar("A4", "Missing category");
 
 Test::Results
 TestIdentifiers::test(string key, Options)
