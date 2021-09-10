@@ -1,0 +1,16 @@
+*.o
+*~
+*.so
+*.dll
+*.exe
+vamp-plugin-tester
+build/Release
+build/x64/Release
+build/Debug
+build/x64/Debug
+*.VC.db
+*.VC.opendb
+*.filters
+.repoint-*.bin
+.repoint.point
+vamp-plugin-sdk

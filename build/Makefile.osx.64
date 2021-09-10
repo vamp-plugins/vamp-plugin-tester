@@ -1,7 +1,7 @@
 
-ARCHFLAGS	:= -isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4 -arch x86_64
-LDFLAGS 	+= $(ARCHFLAGS) -L../vamp-plugin-sdk -lvamp-hostsdk -ldl
-CXXFLAGS	+= $(ARCHFLAGS) -I../vamp-plugin-sdk -g -Wall -Wextra 
+ARCHFLAGS	:= -mmacosx-version-min=10.7 -arch x86_64
+LDFLAGS 	+= $(ARCHFLAGS) -L../vamp-plugin-sdk -lvamp-hostsdk -ldl -stdlib=libc++
+CXXFLAGS	+= $(ARCHFLAGS) -I../vamp-plugin-sdk -g -Wall -Wextra -stdlib=libc++
 
 OBJECTS		:= vamp-plugin-tester.o Tester.o Test.o TestStaticData.o TestInputExtremes.o TestMultipleRuns.o TestOutputs.o TestDefaults.o TestInitialise.o
 
