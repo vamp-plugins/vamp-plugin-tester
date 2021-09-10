@@ -1,11 +1,11 @@
 
 ARCHFLAGS	:= -mmacosx-version-min=10.7 -arch x86_64
-LDFLAGS 	+= $(ARCHFLAGS) -L../vamp-plugin-sdk -lvamp-hostsdk -ldl -stdlib=libc++
-CXXFLAGS	+= $(ARCHFLAGS) -I../vamp-plugin-sdk -g -Wall -Wextra -stdlib=libc++
+LDFLAGS 	+= $(ARCHFLAGS) -Lvamp-plugin-sdk -L../vamp-plugin-sdk -lvamp-hostsdk -ldl -stdlib=libc++
+CXXFLAGS	+= $(ARCHFLAGS) -Ivamp-plugin-sdk -I../vamp-plugin-sdk -g -Wall -Wextra -stdlib=libc++
 
 OBJECTS		:= vamp-plugin-tester.o Tester.o Test.o TestStaticData.o TestInputExtremes.o TestMultipleRuns.o TestOutputs.o TestDefaults.o TestInitialise.o
 
-vamp-plugin-tester-64:	$(OBJECTS)
+vamp-plugin-tester:	$(OBJECTS)
 	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS)
 
 clean:
