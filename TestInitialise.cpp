@@ -77,7 +77,7 @@ TestSampleRates::test(string key, Options options)
             cout << "[" << rate << "Hz] " << flush;
         }
 
-        auto_ptr<Plugin> p(load(key, rate));
+        unique_ptr<Plugin> p(load(key, rate));
         Plugin::FeatureSet f;
         float **data = 0;
         size_t channels = 0;
@@ -128,7 +128,7 @@ Test::Results
 TestLengthyConstructor::test(string key, Options)
 {
     time_t t0 = time(0);
-    auto_ptr<Plugin> p(load(key));
+    unique_ptr<Plugin> p(load(key));
     time_t t1 = time(0);
     Results r;
     if (t1 - t0 > 1) r.push_back(warning("Constructor takes some time to run: work should be deferred to initialise?"));

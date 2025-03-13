@@ -62,7 +62,7 @@ Test::Results
 TestOutputNumbers::test(string key, Options options)
 {
     int rate = 44100;
-    auto_ptr<Plugin> p(load(key, rate));
+    unique_ptr<Plugin> p(load(key, rate));
     Plugin::FeatureSet f;
     Results r;
     float **data = 0;
@@ -110,7 +110,7 @@ TestTimestamps::test(string key, Options options)
     int rate = 44100;
 
     // we want to be sure that a buffer size adapter is not used:
-    auto_ptr<Plugin> p(PluginLoader::getInstance()->loadPlugin
+    unique_ptr<Plugin> p(PluginLoader::getInstance()->loadPlugin
                        (key, rate, PluginLoader::ADAPT_ALL_SAFE));
 
     Results r;

@@ -71,7 +71,7 @@ TestNormalInput::test(string key, Options options)
 {
     Plugin::FeatureSet f;
     int rate = 44100;
-    auto_ptr<Plugin> p(load(key, rate));
+    unique_ptr<Plugin> p(load(key, rate));
     Results r;
     size_t channels, step, blocksize;
     if (!initDefaults(p.get(), channels, step, blocksize, r)) return r;
@@ -103,7 +103,7 @@ TestNormalInput::test(string key, Options options)
 Test::Results
 TestNoInput::test(string key, Options)
 {
-    auto_ptr<Plugin> p(load(key));
+    unique_ptr<Plugin> p(load(key));
     Results r;
     size_t channels, step, block;
     if (!initDefaults(p.get(), channels, step, block, r)) return r;
@@ -121,7 +121,7 @@ TestShortInput::test(string key, Options options)
 {
     Plugin::FeatureSet f;
     int rate = 44100;
-    auto_ptr<Plugin> p(load(key, rate));
+    unique_ptr<Plugin> p(load(key, rate));
     Results r;
     size_t channels, step, blocksize;
     if (!initDefaults(p.get(), channels, step, blocksize, r)) return r;
@@ -152,7 +152,7 @@ TestSilentInput::test(string key, Options options)
 {
     Plugin::FeatureSet f;
     int rate = 44100;
-    auto_ptr<Plugin> p(load(key, rate));
+    unique_ptr<Plugin> p(load(key, rate));
     Results r;
     size_t channels, step, blocksize;
     if (!initDefaults(p.get(), channels, step, blocksize, r)) return r;
@@ -184,7 +184,7 @@ TestTooLoudInput::test(string key, Options options)
 {
     Plugin::FeatureSet f;
     int rate = 44100;
-    auto_ptr<Plugin> p(load(key, rate));
+    unique_ptr<Plugin> p(load(key, rate));
     Results r;
     size_t channels, step, blocksize;
     if (!initDefaults(p.get(), channels, step, blocksize, r)) return r;
@@ -218,7 +218,7 @@ TestRandomInput::test(string key, Options options)
 {
     Plugin::FeatureSet f;
     int rate = 44100;
-    auto_ptr<Plugin> p(load(key, rate));
+    unique_ptr<Plugin> p(load(key, rate));
     Results r;
     size_t channels, step, blocksize;
     if (!initDefaults(p.get(), channels, step, blocksize, r)) return r;

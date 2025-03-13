@@ -70,7 +70,7 @@ TestDefaultProgram::test(string key, Options options)
     size_t count = 100;
 
     for (int run = 0; run < 2; ++run) {
-        auto_ptr<Plugin> p(load(key, rate));
+        unique_ptr<Plugin> p(load(key, rate));
 	if (p->getPrograms().empty()) return r;
 	if (run == 1) {
             p->selectProgram(p->getCurrentProgram());
@@ -116,7 +116,7 @@ TestDefaultParameters::test(string key, Options options)
     size_t count = 100;
 
     for (int run = 0; run < 2; ++run) {
-        auto_ptr<Plugin> p(load(key, rate));
+        unique_ptr<Plugin> p(load(key, rate));
 	if (p->getParameterDescriptors().empty()) return r;
 	if (run == 1) {
             Plugin::ParameterList pl = p->getParameterDescriptors();
@@ -173,7 +173,7 @@ TestParametersOnReset::test(string key, Options options)
     size_t count = 100;
 
     for (int run = 0; run < 2; ++run) {
-        auto_ptr<Plugin> p(load(key, rate));
+        unique_ptr<Plugin> p(load(key, rate));
 	if (p->getParameterDescriptors().empty()) return r;
 
         // Set all parameters to non-default values

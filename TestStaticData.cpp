@@ -64,7 +64,7 @@ TestCategory::m_registrar("A4", "Missing category");
 Test::Results
 TestIdentifiers::test(string key, Options)
 {
-    auto_ptr<Plugin> p(load(key));
+    unique_ptr<Plugin> p(load(key));
     
     Results r;
     r.push_back(testIdentifier(p->getIdentifier(), "Plugin identifier"));
@@ -101,7 +101,7 @@ TestIdentifiers::testIdentifier(string identifier, string desc)
 Test::Results
 TestEmptyFields::test(string key, Options)
 {
-    auto_ptr<Plugin> p(load(key));
+    unique_ptr<Plugin> p(load(key));
 
     Results r;
 
@@ -159,7 +159,7 @@ TestEmptyFields::testRecommended(string text, string desc)
 Test::Results
 TestValueRanges::test(string key, Options)
 {
-    auto_ptr<Plugin> p(load(key));
+    unique_ptr<Plugin> p(load(key));
 
     Results r;
 

@@ -2,7 +2,7 @@
 ARCHFLAGS	?=
 
 LDFLAGS 	+= $(ARCHFLAGS) -ldl -pthread
-CXXFLAGS	+= $(ARCHFLAGS) -std=c++98 -g -Wall -Wextra -Ivamp-plugin-sdk -pthread
+CXXFLAGS	+= $(ARCHFLAGS) -std=c++11 -g -Wall -Wextra -Ivamp-plugin-sdk -pthread
 
 # We include the Vamp Host SDK sources in the build here, so that we
 # can build the entire thing with debug symbols even though the SDK

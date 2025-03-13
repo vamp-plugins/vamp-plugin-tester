@@ -72,7 +72,7 @@ TestDistinctRuns::test(string key, Options options)
     size_t count = 100;
 
     for (int run = 0; run < 2; ++run) {
-        auto_ptr<Plugin> p(load(key, rate));
+        unique_ptr<Plugin> p(load(key, rate));
         if (!initAdapted(p.get(), channels, _step, _step, r)) return r;
         if (!data) data = createTestAudio(channels, _step, count);
         for (size_t i = 0; i < count; ++i) {
@@ -113,7 +113,7 @@ TestReset::test(string key, Options options)
     size_t channels = 0;
     size_t count = 100;
 
-    auto_ptr<Plugin> p(load(key, rate));
+    unique_ptr<Plugin> p(load(key, rate));
 
     for (int run = 0; run < 2; ++run) {
         if (run == 1) p->reset();
@@ -211,7 +211,7 @@ TestDifferentStartTimes::test(string key, Options options)
     size_t count = 100;
 
     for (int run = 0; run < 2; ++run) {
-        auto_ptr<Plugin> p(load(key, rate));
+        unique_ptr<Plugin> p(load(key, rate));
         if (!initAdapted(p.get(), channels, _step, _step, r)) return r;
         if (!data) data = createTestAudio(channels, _step, count);
         for (size_t i = 0; i < count; ++i) {
